@@ -1,0 +1,59 @@
+###
+
+#Get resources
+#delete api after testing
+GET https://apimock.test/api/resources/shopping-list-663e296462362
+Content-Type: application/json
+
+###
+
+###
+
+#Get resource
+
+GET http://mockapi.test/api/resources/todo-app-66164cfb45a55/2
+Content-Type: application/json
+
+###
+
+###
+
+#Update resource
+
+PUT http://mockapi.test/api/resources/{resource}
+Content-Type: application/json
+
+{
+
+}
+
+
+###
+
+#Create resource
+
+POST https://apimock.test/api/resources/shopping-list-663e296462362
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "users",
+    "fields": [
+        {
+            "name": "name",
+            "type": "person.name"
+        },
+        {
+            "name": "phone_number",
+            "type": "phoneNumber.phoneNumber"
+        }
+    ]
+}
+
+###
+
+#Delete resource
+
+DELETE http://mockapi.test/api/resources/todo-app-66164cfb45a55/2
+Content-Type: application/json
+

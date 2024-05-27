@@ -1,0 +1,11 @@
+###
+
+#Get resources
+#delete api after testing
+POST http://apimock.test/api/relations/connect
+Content-Type: application/json
+
+{
+    "source": 2,
+    "destination": 1
+}

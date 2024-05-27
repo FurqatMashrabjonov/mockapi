@@ -1,0 +1,10 @@
+###
+
+#Get resources
+#delete api after testing
+POST https://apimock.test/api/data/generate/shopping-list-663e296462362/1
+Content-Type: application/json
+
+{
+  "count": 100000
+}

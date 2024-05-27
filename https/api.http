@@ -1,0 +1,47 @@
+GET https://shopping-list-663e296462362.apimock.test/users
+Content-Type: application/json
+Accept: application/json
+
+
+###
+POST https://shopping-list-663e296462362.apimock.test/users
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "5555555555555o",
+    "email": "+80534805438",
+    "created_at": "Some title",
+    "updated_at": "Some comment",
+    "password": "Some comment"
+}
+
+
+###
+PUT http://todo-app-6620f4675906f.apimock.test/posts/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Utttttttttttttttt",
+  "comment": "+1111111111111"
+}
+
+
+
+###
+DELETE http://todo-app-6620f4675906f.apimock.test/users/1/posts/23
+Content-Type: application/json
+Accept: application/json
+
+
+
+###
+POST https://todo-app-664af0d51ccaf.apimock.test/makes
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Utttttttttttttttt",
+  "phone_number": "+1111111111111"
+}

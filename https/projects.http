@@ -1,0 +1,45 @@
+###
+
+#get all projects
+#TODO: after complete delete api
+GET http://apimock.test/api/projects
+
+###
+
+###
+# get one project
+GET http://apimock.test/api/projects/project-name-66164bcf77185
+
+###
+
+###
+# create project
+POST https://apimock.test/api/projects
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "Shopping List",
+    "user_id": 2
+}
+
+###
+
+###
+# update project
+
+PUT https://mockapi.test/api/projects/{uuid}
+Content-Type: application/json
+
+{
+    "name": "Project Name",
+    "description": "Project Description",
+    "status": "active"
+}
+
+###
+
+###
+# delete project
+DELETE http://mockapi.test/api/projects/todo-app-66164c5a42d22
+
