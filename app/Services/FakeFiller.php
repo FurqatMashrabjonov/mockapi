@@ -120,10 +120,187 @@ class FakeFiller
             */
 
             'text' => [
+                'text' => ['text', []],
                 'title' => ['text', []],
                 'realText' => ['realText', [200, 2]],
                 'realTextBetween' => ['realTextBetween', [160, 200, 2]],
+                'words' => ['word', []],
+                'sentence' => ['sentence', []],
+                'paragraph' => ['paragraph', []],
+                'randomLetter' => ['randomLetter', []]
             ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'digit' => [
+                'randomDigit' => ['randomDigit', []],
+                'randomDigitNotNull' => ['randomDigitNotNull'],
+                'randomNumber' => ['randomNumber', [2]],
+                'randomFloat' => ['randomFloat', [2, 100]],
+                'numberBetween' => ['numberBetween', [1, 100]],
+                'numerify' => ['numerify', ['##-###']],
+                'lexify' => ['lexify', ['??-??']],
+                'bothify' => ['bothify', ['##-??']],
+                'asciify' => ['asciify', ['user-****']],
+                'regexify' => ['regexify', ['/[A-Z]{2}[0-9]{3}/']],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'dateAndTime' => [
+                'unixTime' => ['unixTime', []],
+                'dateTime' => ['dateTime', []],
+                'dateTimeAD' => ['dateTimeAD', []],
+                'iso8601' => ['iso8601', []],
+                'date' => ['date', []],
+                'time' => ['time', []],
+                'dateTimeBetween' => ['dateTimeBetween', ['now', '+1 week']],
+                'dateTimeInInterval' => ['dateTimeInInterval', ['+1 week', 'now']],
+                'dateTimeThisCentury' => ['dateTimeThisCentury', []],
+                'dateTimeThisDecade' => ['dateTimeThisDecade', []],
+                'dateTimeThisYear' => ['dateTimeThisYear', []],
+                'dateTimeThisMonth' => ['dateTimeThisMonth', []],
+                'amPm' => ['amPm', []],
+                'dayOfMonth' => ['dayOfMonth', []],
+                'dayOfWeek' => ['dayOfWeek', []],
+                'month' => ['month', []],
+                'monthName' => ['monthName', []],
+                'year' => ['year', []],
+                'century' => ['century', []],
+                'timezone' => ['timezone', []]
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'internet' => [
+                'email' => ['email', []],
+                'safeEmail' => ['safeEmail', []],
+                'freeEmail' => ['freeEmail', []],
+                'companyEmail' => ['companyEmail', []],
+                'freeEmailDomain' => ['freeEmailDomain', []],
+                'safeEmailDomain' => ['safeEmailDomain', []],
+                'userName' => ['userName', []],
+                'password' => ['password', []],
+                'domainName' => ['domainName', []],
+                'domainWord' => ['domainWord', []],
+                'tld' => ['tld', []],
+                'url' => ['url', []],
+                'slug' => ['slug', []],
+                'ipv4' => ['ipv4', []],
+                'ipv6' => ['ipv6', []],
+                'localIpv4' => ['localIpv4', []],
+                'macAddress' => ['macAddress', []],
+                'userAgent' => ['userAgent', []],
+                'chrome' => ['chrome', []],
+                'firefox' => ['firefox', []],
+                'safari' => ['safari', []],
+                'opera' => ['opera', []],
+                'internetExplorer' => ['internetExplorer', []],
+                'windowsPlatformToken' => ['windowsPlatformToken', []],
+                'macPlatformToken' => ['macPlatformToken', []],
+                'linuxPlatformToken' => ['linuxPlatformToken', []],
+                'uuid' => ['uuid', []],
+                'mimeType' => ['mimeType', []],
+                'filePath' => ['filePath', []],
+                'fileExtension' => ['fileExtension', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'userAgent' => [
+                'userAgent' => ['userAgent', []],
+                'chrome' => ['chrome', []],
+                'firefox' => ['firefox', []],
+                'safari' => ['safari', []],
+                'opera' => ['opera', []],
+                'internetExplorer' => ['internetExplorer', []],
+                'msedge' => ['msedge', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'creditCard' => [
+                'creditCardType' => ['creditCardType', []],
+                'creditCardNumber' => ['creditCardNumber', []],
+                'creditCardExpirationDate' => ['creditCardExpirationDate', []],
+                'creditCardExpirationDateString' => ['creditCardExpirationDateString', []],
+                'creditCardDetails' => ['creditCardDetails', []],
+                'iban' => ['iban', []],
+                'swiftBicNumber' => ['swiftBicNumber', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'color' => [
+                'hexColor' => ['hexColor', []],
+                'safeHexColor' => ['safeHexColor', []],
+                'rgbColor' => ['rgbColor', []],
+                'rgbCssColor' => ['rgbCssColor', []],
+                'safeColorName' => ['safeColorName', []],
+                'colorName' => ['colorName', []],
+                'hlsColor' => ['hlsColor', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'file' => [
+                'mimeType' => ['mimeTypes', []],
+                'fileExtension' => ['fileExtension', []],
+                'file' => ['file', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'uuid' => [
+                'uuid' => ['uuid', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'barcode' => [
+                'ean13' => ['ean13', []],
+                'ean8' => ['ean8', []],
+                'isbn13' => ['isbn13', []],
+                'isbn10' => ['isbn10', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'miscellaneous' => [
+                'boolean' => ['boolean', []],
+                'md5' => ['md5', []],
+                'sha1' => ['sha1', []],
+                'sha256' => ['sha256', []],
+                'locale' => ['locale', []],
+                'countryISOAlpha3' => ['countryISOAlpha3', []],
+                'languageCode' => ['languageCode', []],
+                'currencyCode' => ['currencyCode', []],
+                'emoji' => ['emoji', []],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'html' => [
+                'randomHtml' => ['randomHtml', [2, 3]],
+            ],
+
+            /*
+             * available in https://fakerphp.github.io/formatters/
+            */
+            'version' => [
+                'semver' => ['semver', []],
+            ]
         ];
     }
 
@@ -147,11 +324,11 @@ class FakeFiller
     {
         $fields = [];
         foreach (self::availableFields() as $key => $availableField) {
-            if (count($availableField) > 0){
-                foreach ($availableField as $field => $value){
+            if (count($availableField) > 0) {
+                foreach ($availableField as $field => $value) {
                     $fields['fakerPHP'][] = $key . '.' . $field;
                 }
-            }else{
+            } else {
                 $fields[$key] = [];
             }
         }

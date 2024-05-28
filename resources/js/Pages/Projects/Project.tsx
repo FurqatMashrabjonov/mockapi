@@ -6,13 +6,22 @@ import {Endpoint} from "@/Components/Endpoint";
 import Relations from "@/Components/Relations";
 import Modal from "@/Components/Modal";
 import {CreateResource} from "@/Pages/Projects/Components/CreateResource";
-import {IconBrandOpenai, IconPlus} from "@tabler/icons-react";
+import {
+    IconBrandOpenai,
+    IconDatabaseExport,
+    IconDotsVertical, IconEdit, IconFileExport,
+    IconHttpPost,
+    IconPlus, IconTableExport,
+    IconTrash
+} from "@tabler/icons-react";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {CreateResourcesByAI} from "@/Pages/Projects/Components/CreateResourcesByAI";
 import {Project} from "@/types/project";
 import Dropdown from "@/Components/Dropdown";
 import toast from "react-hot-toast";
 import axios from "axios";
+import {Tooltip} from "react-tooltip";
+import DeleteProject from "@/Pages/Projects/Components/DeleteProject";
 
 export default function Dashboard({project, maxFields, auth}: PageProps<{
     fields: Object,
@@ -21,6 +30,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
 }>) {
     const [showModal, setShowModal] = useState(false)
     const [showUpdateModal, setShowUpdateModal] = useState(false)
+    const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false)
     const [showAIGenerateModal, setShowAIGenerateModal] = useState(false)
     const [resources, setResources] = useState([])
     const [nodes, setNodes] = useState([])
@@ -54,6 +64,14 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
     const closeAIGenerateModal = () => {
         setShowAIGenerateModal(false)
         getResources()
+    }
+
+    const openShowDeleteProjectModal = () => {
+        setShowDeleteProjectModal(true)
+    }
+
+    const closeShowDeleteProjectModal = () => {
+        setShowDeleteProjectModal(false)
     }
 
     const getResources = () => {
@@ -94,7 +112,51 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Projects / {project.name}
+                <div className="flex items-center">
+                    <div>
+                        Projects /
+                    </div>
+                    {/*<div className="w-1/12">*/}
+                    {/*    <div className="rounded-full" dangerouslySetInnerHTML={{__html: project.avatar}}></div>*/}
+                    {/*</div>*/}
+                    <div className="ml-2">
+                        {project.name}
+                    </div>
+                    <div className="ml-2">
+                        <Dropdown>
+                            <div data-tooltip-id="project-actions"  data-tooltip-content="Project actions">
+                                <Dropdown.Trigger>
+                                        <span className="inline-flex rounded-md">
+                                            <button
+                                                type="button"
+                                                className="inline-flex items-center px-3 py-2 border border-gray-400 text-sm leading-4 font-medium rounded-full dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                                            >
+                                                <IconDotsVertical size="20" />
+                                            </button>
+                                        </span>
+                                </Dropdown.Trigger>
+
+                            </div>
+                            <Dropdown.Content>
+                                <Dropdown.Button onClick={openShowDeleteProjectModal}>
+                                    <IconEdit size="20" /> <h6 className="ml-2">Edit</h6>
+                                </Dropdown.Button>
+                                <Dropdown.Button onClick={openShowDeleteProjectModal}>
+                                    <IconFileExport size="20" /> <h6 className="ml-2">Export Postman</h6>
+                                </Dropdown.Button>
+                                <hr className="m-1"/>
+                                <Dropdown.Button onClick={openShowDeleteProjectModal}>
+                                    <IconTrash size="20" color="red" /> <h6 className="ml-2">Delete</h6>
+                                </Dropdown.Button>
+                            </Dropdown.Content>
+                        </Dropdown>
+                        <Tooltip
+                            id="project-actions"
+                            style={{backgroundColor: '#1f2937', color: 'white'}}
+                            place="bottom"
+                        />
+                    </div>
+                </div>
 
             </h2>}
         >
@@ -105,12 +167,12 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto whitespace-nowrap mx-auto">
                             <Endpoint projectUUID={project.uuid} auth={auth}/>
-                            <div className="flex justify-end">
-                                <SecondaryButton onClick={generateAll}>
+                            <div className="flex justify-end mt-2">
+                                <SecondaryButton type="button" onClick={generateAll}>
                                     Generate All
                                 </SecondaryButton>
 
-                                <SecondaryButton onClick={resetAll} className="ml-2">
+                                <SecondaryButton type="button" onClick={resetAll} className="ml-2">
                                     Reset All
                                 </SecondaryButton>
 
@@ -162,7 +224,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                                 <SecondaryButton disabled={resources.length == 5} onClick={openModal}>
                                     <IconPlus size={15}/> &nbsp; Create
                                 </SecondaryButton>
-                                <SecondaryButton className="ml-2" onClick={openAIGenerateModal}>
+                                <SecondaryButton className="ml-2" disabled={resources.length == 5} onClick={openAIGenerateModal}>
                                     <IconBrandOpenai size={15}/> &nbsp; Generate With AI
                                 </SecondaryButton>
                             </div>
@@ -187,6 +249,10 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
 
             <Modal show={showAIGenerateModal} onClose={closeAIGenerateModal} maxWidth="5xl">
                 <CreateResourcesByAI project={project} closeModal={closeAIGenerateModal} auth={auth}/>
+            </Modal>
+
+            <Modal show={showDeleteProjectModal} onClose={closeShowDeleteProjectModal} maxWidth="xl">
+                <DeleteProject project={project} closeModal={closeAIGenerateModal} auth={auth}/>
             </Modal>
         </AuthenticatedLayout>
     );

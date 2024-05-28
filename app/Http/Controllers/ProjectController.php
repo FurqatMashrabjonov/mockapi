@@ -86,6 +86,6 @@ class ProjectController extends Controller
     {
         $project->delete();
 
-        return success_response([]);
+        return redirect(url('/projects',));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Resource;
 use App\Services\FakeFiller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -76,7 +77,7 @@ class DataController extends Controller
         return success_response($resourceData->only('data')['data']);
     }
 
-    public function generateAll(Project $project)
+    public function generateAll(Project $project): RedirectResponse
     {
         ini_set('memory_limit', '1024M'); // Increases the memory limit to 1024M for this script
 
@@ -89,7 +90,7 @@ class DataController extends Controller
         return redirect()->back();
     }
 
-    public function resetAll(Project $project)
+    public function resetAll(Project $project): RedirectResponse
     {
         $project->resources()->chunk(200, function ($resources) {
             foreach ($resources as $resource) {

@@ -1,15 +1,14 @@
 <?php
 
 use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ResourceController;
 use Illuminate\Foundation\Application;
+use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Gemini\Laravel\Facades\Gemini;
 
 
 Route::get('/', function () {
@@ -65,7 +64,7 @@ Route::controller(ResourceController::class)
         Route::get('/fields', 'fields')->name('fields');
         Route::post('generate/ai', 'generateWithAI')->name('generate.ai');
         Route::get('/{project}', 'index')->name('index');
-        Route::post('/{project}', 'store')->name('store');
+        Route::post('/{project}', 'createOrUpdate')->name('store');
         Route::get('/{project}/{resource}', 'show')->name('show');
         Route::delete('/{project}/{resource}', 'destroy')->name('destroy');
     });

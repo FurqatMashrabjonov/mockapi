@@ -41,25 +41,21 @@ class ResourceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Project $project, ResourceRequest $request)
+    public function createOrUpdate(Project $project, ResourceRequest $request)
     {
         $this->createResource($request->validated(), $project);
     }
 
     public function createResource(array $data, Project $project)
     {
-        if ($project->resources()->where('name', $data['name'])->exists() ||
-            $project->resources()->count() >= config('resources.max_resources', 5)) {
+        if ($project->resources()->count() >= config('resources.max_resources', 5)) {
             return false;
         }
 
-//        foreach ($data['fields'] as $key => $field) {
-//            if ($field['name'] === 'id') {
-//                unset($data['fields'][$key]);
-//            }
-//        }
-
-        $resource = $project->resources()->create($data);
+        $resource = $project->resources()->updateOrCreate([
+            'name' => $data['name'],
+            'project_id' => $project->id,
+        ], $data);
         $resource->data()->create();
         return $resource;
     }

@@ -32,6 +32,7 @@
         "mini-svg-data-uri": "^1.4.4",
         "next": "^14.2.3",
         "react-hot-toast": "^2.4.1",
+        "react-tooltip": "^5.26.4",
         "reactflow": "^11.11.3",
         "tailwind-merge": "^2.3.0"
     }
