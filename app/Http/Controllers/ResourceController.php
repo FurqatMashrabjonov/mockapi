@@ -8,9 +8,9 @@ use App\Models\Project;
 use App\Models\Resource;
 use App\Services\AiResourceGenerator;
 use App\Services\FakeFiller;
+use App\Services\Relation\EdgeGenerator;
+use App\Services\Relation\NodeGenerator;
 use Illuminate\Support\Facades\Log;
-use phpDocumentor\Reflection\Types\Collection;
-use phpDocumentor\Reflection\Types\False_;
 
 class ResourceController extends Controller
 {
@@ -28,8 +28,14 @@ class ResourceController extends Controller
     public function index(Project $project)
     {
         $resources = $project->resources()->get();
+        $nodes = NodeGenerator::generate($project);
+        $edges = EdgeGenerator::generate($project);
 
-        return success_response($resources->toArray());
+        return success_response([
+            'resources' => $resources->toArray(),
+            'nodes' => $nodes,
+            'edges' => $edges,
+        ]);
     }
 
     /**
@@ -47,11 +53,11 @@ class ResourceController extends Controller
             return false;
         }
 
-        foreach ($data['fields'] as $key => $field) {
-            if ($field['name'] === 'id') {
-                unset($data['fields'][$key]);
-            }
-        }
+//        foreach ($data['fields'] as $key => $field) {
+//            if ($field['name'] === 'id') {
+//                unset($data['fields'][$key]);
+//            }
+//        }
 
         $resource = $project->resources()->create($data);
         $resource->data()->create();
@@ -84,7 +90,7 @@ class ResourceController extends Controller
             Log::error($e->getMessage());
             return redirect()->back()->with('error', 'Failed to generate resources');
         }
-//        return redirect(route('projects.show', ['project' => $project], absolute: false));
+        return redirect()->back();
     }
 
     /**

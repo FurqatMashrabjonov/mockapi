@@ -60,9 +60,14 @@ class ProjectController extends Controller
             'project' => $project,
             'fields' => $fields,
             'maxFields' => 10,
-            'edges' => EdgeGenerator::generate($project->resources->toArray()),
+            'edges' => EdgeGenerator::generate($project),
             'nodes' => NodeGenerator::generate($project),
         ]);
+    }
+
+    public function showApi(Project $project)
+    {
+        return success_response($project->toArray());
     }
 
     /**

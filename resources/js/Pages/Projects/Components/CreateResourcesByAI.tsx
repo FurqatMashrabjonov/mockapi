@@ -7,6 +7,7 @@ import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import InputLabel from "@/Components/InputLabel";
+import toast from "react-hot-toast";
 
 export function CreateResourcesByAI({project, closeModal, auth}: PageProps<{
     project: Project,
@@ -23,7 +24,11 @@ export function CreateResourcesByAI({project, closeModal, auth}: PageProps<{
         e.preventDefault()
 
         post(route('resources.generate.ai'), {
-            preserveScroll: true
+            preserveScroll: true,
+            onSuccess: () => {
+                closeModal()
+                toast.success('Resources generated successfully by AI')
+            }
         });
     }
 

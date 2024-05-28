@@ -31,6 +31,7 @@
         "framer-motion": "^11.1.9",
         "mini-svg-data-uri": "^1.4.4",
         "next": "^14.2.3",
+        "react-hot-toast": "^2.4.1",
         "reactflow": "^11.11.3",
         "tailwind-merge": "^2.3.0"
     }

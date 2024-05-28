@@ -11,21 +11,28 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import {CreateResourcesByAI} from "@/Pages/Projects/Components/CreateResourcesByAI";
 import {Project} from "@/types/project";
 import Dropdown from "@/Components/Dropdown";
-import {UpdateResource} from "@/Pages/Projects/Components/UpdateResource";
+import toast from "react-hot-toast";
+import axios from "axios";
 
-export default function Dashboard({project, maxFields, auth, edges, nodes}: PageProps<{
-    project: Project,
+export default function Dashboard({project, maxFields, auth}: PageProps<{
     fields: Object,
     maxFields: number,
-    edges: Array<any>,
-    nodes: Array<any>,
+    project: Project,
 }>) {
     const [showModal, setShowModal] = useState(false)
     const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [showAIGenerateModal, setShowAIGenerateModal] = useState(false)
+    const [resources, setResources] = useState([])
+    const [nodes, setNodes] = useState([])
+    const [edges, setEdges] = useState([])
+    const {data, setData, post, processing, errors, reset} = useForm({
+        project_uuid: project.uuid,
+        resource_description: 'this is simple shopping list app',
+    });
 
     const closeModal = () => {
         setShowModal(false)
+        getResources()
     }
 
     const openModal = () => {
@@ -46,29 +53,40 @@ export default function Dashboard({project, maxFields, auth, edges, nodes}: Page
 
     const closeAIGenerateModal = () => {
         setShowAIGenerateModal(false)
+        getResources()
     }
 
-    const {data, setData, post, processing, errors, reset} = useForm({
-        project_uuid: project.uuid,
-        resource_description: 'this is simple shopping list app',
-    });
-
-    const generateAI = (e: React.FormEvent<HTMLFormElement>) => {
-
-        post(route('resources.generate.ai'), {
-            preserveScroll: true
-        });
+    const getResources = () => {
+        axios.get(route('resources.index', {project: project}))
+            .then(r => {
+                setResources(r.data.data.resources)
+                setNodes(r.data.data.nodes)
+                setEdges(r.data.data.edges)
+            })
     }
+
+
+    useEffect(() => {
+        getResources()
+    }, [])
 
     const generateAll = () => {
         post(route('data.generate-all', {project: project}), {
-            preserveScroll: true
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Resources generated successfully')
+                getResources()
+            }
         });
     }
 
     const resetAll = () => {
         post(route('data.reset-all', {project: project}), {
-            preserveScroll: true
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Resources reset successfully')
+                getResources()
+            }
         });
     }
 
@@ -141,7 +159,7 @@ export default function Dashboard({project, maxFields, auth, edges, nodes}: Page
                                 Resources
                             </h2>
                             <div>
-                                <SecondaryButton onClick={openModal}>
+                                <SecondaryButton disabled={resources.length == 5} onClick={openModal}>
                                     <IconPlus size={15}/> &nbsp; Create
                                 </SecondaryButton>
                                 <SecondaryButton className="ml-2" onClick={openAIGenerateModal}>
@@ -150,14 +168,14 @@ export default function Dashboard({project, maxFields, auth, edges, nodes}: Page
                             </div>
                         </div>
                         <div className="pl-6 pr-6 text-gray-900 dark:text-gray-100">
-                            {project.resources.length === 0 &&
+                            {resources.length === 0 &&
                                 <div className="text-center">
                                     <p className="text-lg font-medium">No resource found</p>
                                     <p className="text-sm text-gray-600 dark:text-gray-400">Create a new resource to get
                                         started</p>
                                 </div>
                             }
-                            <Relations resources={project.resources} auth={auth} nodeConnections={nodes} edgeConnections={edges}/>
+                            <Relations resources={resources} auth={auth} nodeConnections={nodes} edgeConnections={edges}/>
                         </div>
                     </div>
                 </div>

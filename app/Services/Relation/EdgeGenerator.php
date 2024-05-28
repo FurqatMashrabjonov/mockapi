@@ -2,11 +2,14 @@
 
 namespace App\Services\Relation;
 
+use App\Models\Project;
+
 class EdgeGenerator
 {
 
-    public static function generate(array $resources): array
+    public static function generate(Project $project): array
     {
+        $resources = $project->resources()->get()->toArray();
         /*
          * edges.push({
                     id: 'horizontal-' + resource.id.toString() + '-' + resource.parent_id.toString(),

@@ -2,6 +2,7 @@ import React, {memo, useState} from 'react';
 import {Handle, NodeProps, NodeToolbar, Position} from 'reactflow';
 import Modal from "@/Components/Modal";
 import {UpdateResource} from "@/Pages/Projects/Components/UpdateResource";
+import toast from "react-hot-toast";
 
 
 function CustomNode({data: {resource, rest_api_doc}}: NodeProps) {
@@ -39,10 +40,6 @@ function CustomNode({data: {resource, rest_api_doc}}: NodeProps) {
                 </div>
                 <Handle type="source" position={Position.Left}/>
             </div>
-
-
-
-
 
             <Modal show={showUpdateModal} onClose={closeUpdateModal} maxWidth="5xl">
                 <UpdateResource resource={resource} closeModal={closeUpdateModal} restApis={rest_api_doc} auth={{}}/>

@@ -19,15 +19,13 @@ type Edge = {
 };
 
 
-export default function Relations({resources, edgeConnections, nodeConnections}: PageProps<{
-    resources: Resource[],
+export default function Relations({edgeConnections, nodeConnections}: PageProps<{
     edgeConnections: [],
     nodeConnections: [],
     // project: Project,
 }>) {
-
-    const [nodes, setNodes, onNodesChange] = useNodesState(nodeConnections);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(edgeConnections);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
     const [showUpdateModal, setShowUpdateModal] = useState(false);
 
@@ -41,6 +39,11 @@ export default function Relations({resources, edgeConnections, nodeConnections}:
     );
 
     const nodeTypes = useMemo(() => ({ textUpdater: CustomNode }), []);
+
+    useEffect(() => {
+        setNodes(nodeConnections);
+        setEdges(edgeConnections);
+    }, [nodeConnections, edgeConnections]);
 
     return (
         <div className="cursor-pointer" style={{width: '100hv', height: '60vh'}}>

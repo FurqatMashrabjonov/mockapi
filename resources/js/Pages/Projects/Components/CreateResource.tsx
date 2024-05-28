@@ -8,6 +8,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import PrimaryButton from "@/Components/PrimaryButton";
 import axios from "axios";
 import {IconPlus, IconX} from "@tabler/icons-react";
+import toast from "react-hot-toast";
 
 
 export function CreateResource({project, maxFields, closeModal, auth}: PageProps<{
@@ -19,11 +20,11 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
     const {data, setData, post, processing, errors, reset} = useForm({
         name: '',
         fields: [
-            {
-                name: 'id',
-                category: 'number',
-                type: 'number',
-            },
+            // {
+            //     name: 'id',
+            //     category: 'number',
+            //     type: 'number',
+            // },
             {
                 name: 'name',
                 category: 'fakerPHP',
@@ -56,10 +57,13 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
     const createResource = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // data.fields.shift();
-
         post(route('resources.store', {project: project}), {
-            preserveScroll: true
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                closeModal();
+                toast.success('Resource created successfully');
+            }
         });
     };
 
@@ -131,6 +135,27 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                     Define Resource schema, it will be used to generate mock data.
                 </p>
 
+                <div>
+                    <div className="flex align-items-center mt-2">
+                        <TextInput
+                            id={`field-name-id`}
+                            disabled={true}
+                            value="id"
+                            autoComplete="off"
+                            placeholder="Field name"
+                            className="w-3/12"
+                        />
+                        <select
+                            id={`category-type-id`}
+                            className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                            value={'Object ID'}
+                            disabled={true}
+                        >
+                            <option value="number">Unique ID</option>
+                        </select>
+                    </div>
+                </div>
+
                 {data.fields.map((field: any, index: number) => (
                     <div key={index}>
                         <div className="flex align-items-center mt-2" key={index}>
@@ -139,7 +164,6 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                 type="text"
                                 required
                                 name={`fields[${index}][name]`}
-                                disabled={index == 0}
                                 value={field.name}
                                 onChange={(e) => {
                                     let newFields = [...data.fields];
@@ -154,7 +178,6 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                 id={`category-type-${index}`}
                                 className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                 value={field.category}
-                                disabled={index == 0}
                                 onChange={(e) => {
                                     let newFields = [...data.fields];
                                     newFields[index].category = e.target.value;
@@ -206,7 +229,8 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                 </SecondaryButton>
                             )}
                         </div>
-                        <InputError message={formatErrorMessage(formatErrorMessage(errors[`fields.${index}.type`]))} className="mt-2"/>
+                        <InputError message={formatErrorMessage(formatErrorMessage(errors[`fields.${index}.type`]))}
+                                    className="mt-2"/>
                     </div>
                 ))
                 }

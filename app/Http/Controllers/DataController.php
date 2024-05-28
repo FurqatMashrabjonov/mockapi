@@ -86,7 +86,7 @@ class DataController extends Controller
             }
         });
 
-        return success_response(['Data generated successfully']);
+        return redirect()->back();
     }
 
     public function resetAll(Project $project)
@@ -97,6 +97,6 @@ class DataController extends Controller
             }
         });
 
-        return success_response(['Data reset successfully']);
+        return redirect()->back();
     }
 }

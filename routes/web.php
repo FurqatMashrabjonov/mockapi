@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 Route::redirect('/dashboard', '/projects');
 
-Route::get('/projects',  [ProjectController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/projects', [ProjectController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::controller(SocialLoginController::class)
     ->as('social-login.')
@@ -41,7 +41,7 @@ Route::controller(SocialLoginController::class)
         Route::get('{provider}/callback', 'handleProviderCallback')->name('callback');
     });
 
-Route::get('/gemini', function (){
+Route::get('/gemini', function () {
     $result = Gemini::geminiPro()->generateContent('is gemini better than chatGPT?');
 
     return $result->text();
@@ -80,7 +80,7 @@ Route::controller(DataController::class)
         Route::post('reset-all/{project}', 'resetAll')->name('reset-all');
     });
 
-Route::get('/postman', function (){
+Route::get('/postman', function () {
     $project = \App\Models\Project::find(26);
     return \App\Services\RestApiGenerator::postman($project);
 });
