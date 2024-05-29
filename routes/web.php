@@ -54,6 +54,7 @@ Route::controller(ProjectController::class)
     ->group(function () {
         Route::post('/', 'store')->name('store');
         Route::get('/{project}', 'show')->name('show');
+        Route::post('/{project}', 'update')->name('update');
         Route::delete('/{project}', 'destroy')->name('destroy');
     });
 

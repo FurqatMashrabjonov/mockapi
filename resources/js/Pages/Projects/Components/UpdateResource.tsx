@@ -12,7 +12,7 @@ import {Resource} from "@/types/project";
 import {Route} from "@/types/route";
 
 
-export function UpdateResource({resource, closeModal, restApis, auth}: PageProps<{
+export function UpdateResource({resource, closeModal, restApis}: PageProps<{
     resource: Resource,
     closeModal: () => void,
     restApis: Array<Array<Route>>,
@@ -44,9 +44,9 @@ export function UpdateResource({resource, closeModal, restApis, auth}: PageProps
 
         // data.fields.shift();
 
-        post(route('resources.store', {project: project}), {
-            preserveScroll: true
-        });
+        // post(route('resources.store', {project: project}), {
+        //     preserveScroll: true
+        // });
     };
 
     const formatErrorMessage = (message: string) => {
@@ -64,11 +64,11 @@ export function UpdateResource({resource, closeModal, restApis, auth}: PageProps
         if (fieldsCount >= maxFields) {
             return;
         }
-        setData('fields', [...data.fields, {
-            name: '',
-            category: 'number',
-            type: '',
-        }]);
+        // setData('fields', [...data.fields, {
+        //     name: '',
+        //     category: 'number',
+        //     type: '',
+        // }]);
     }
 
     const deleteField = (index: number) => {
@@ -127,11 +127,11 @@ export function UpdateResource({resource, closeModal, restApis, auth}: PageProps
                                 name={`fields[${index}][name]`}
                                 disabled={index == 0}
                                 value={field.name}
-                                onChange={(e) => {
-                                    let newFields = [...data.fields];
-                                    newFields[index].name = e.target.value;
-                                    setData('fields', newFields);
-                                }}
+                                // onChange={(e) => {
+                                //     let newFields = [...data.fields];
+                                //     newFields[index].name = e.target.value;
+                                //     setData('fields', newFields);
+                                // }}
                                 autoComplete="off"
                                 placeholder="Field name"
                                 className="w-3/12"
@@ -141,11 +141,11 @@ export function UpdateResource({resource, closeModal, restApis, auth}: PageProps
                                 className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                 value={['number', 'string', 'boolean', 'date', 'array', 'object'].includes(field.category) ? field.category : 'fakerPHP'}
                                 disabled={index == 0}
-                                onChange={(e) => {
-                                    let newFields = [...data.fields];
-                                    newFields[index].category = e.target.value;
-                                    setData('fields', newFields);
-                                }}
+                                // onChange={(e) => {
+                                //     let newFields = [...data.fields];
+                                //     newFields[index].category = e.target.value;
+                                //     setData('fields', newFields);
+                                // }}
                             >
                                 {index == 0 && (
                                     <option value="number">Unique ID</option>
@@ -167,16 +167,16 @@ export function UpdateResource({resource, closeModal, restApis, auth}: PageProps
                                     id={`field-type-${index}`}
                                     className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                     value={field.type}
-                                    onChange={(e) => {
-                                        let newFields = [...data.fields];
-                                        newFields[index].type = e.target.value;
-                                        setData('fields', newFields);
-                                        console.log(data.fields)
-                                    }}
+                                    // onChange={(e) => {
+                                    //     let newFields = [...data.fields];
+                                    //     newFields[index].type = e.target.value;
+                                    //     setData('fields', newFields);
+                                    //     console.log(data.fields)
+                                    // }}
                                 >
-                                    {Object.entries(fields[['number', 'string', 'boolean', 'date', 'array', 'object'].includes(field.category) ? field.category : 'fakerPHP'] || {}).map(([fieldName, fieldValue]) => (
-                                        <option key={fieldName} value={fieldValue}>{fieldValue}</option>
-                                    ))}
+                                    {/*{Object.entries(fields[['number', 'string', 'boolean', 'date', 'array', 'object'].includes(field.category) ? field.category : 'fakerPHP'] || {}).map(([fieldName, fieldValue]) => (*/}
+                                    {/*    // <option key={fieldName} value={fieldValue}>{fieldValue}</option>*/}
+                                    {/*))}*/}
                                 </select>
                             )}
 
@@ -192,7 +192,7 @@ export function UpdateResource({resource, closeModal, restApis, auth}: PageProps
                                 </SecondaryButton>
                             )}
                         </div>
-                        <InputError message={formatErrorMessage(formatErrorMessage(errors[`fields.${index}.type`]))}
+                        <InputError message={formatErrorMessage(formatErrorMessage((errors as any)[`fields.${index}.type`]))}
                                     className="mt-2"/>
                     </div>
                 ))

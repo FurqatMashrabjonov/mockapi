@@ -20,8 +20,8 @@ type Edge = {
 
 
 export default function Relations({edgeConnections, nodeConnections}: PageProps<{
-    edgeConnections: [],
-    nodeConnections: [],
+    edgeConnections: any[],
+    nodeConnections: any[],
     // project: Project,
 }>) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);

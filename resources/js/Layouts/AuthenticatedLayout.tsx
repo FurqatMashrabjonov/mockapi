@@ -139,15 +139,6 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         background: '#1f2937',
                         color: '#fff',
                     },
-
-                    // Default options for specific types
-                    success: {
-                        duration: 3000,
-                        theme: {
-                            primary: 'green',
-                            secondary: 'black',
-                        },
-                    },
                 }}
             />
         </div>

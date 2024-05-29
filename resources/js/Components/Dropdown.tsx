@@ -1,7 +1,6 @@
 import React, { useState, createContext, useContext, Fragment, PropsWithChildren, Dispatch, SetStateAction } from 'react';
 import { Link, InertiaLinkProps } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import SecondaryButton from "@/Components/SecondaryButton";
 
 const DropDownContext = createContext<{
     open: boolean;
@@ -94,7 +93,9 @@ const DropdownLink = ({ className = '', children, ...props }: InertiaLinkProps) 
     );
 };
 
-const DropdownButton = ({ className = '', children, ...props }: InertiaLinkProps) => {
+type ButtonProps = Omit<any, 'type'> & { type?: "button" | "submit" | "reset" };
+
+const DropdownButton = ({ className = '', children, ...props }: ButtonProps) => {
     return (
         <button
             {...props}
@@ -106,7 +107,6 @@ const DropdownButton = ({ className = '', children, ...props }: InertiaLinkProps
             {children}
         </button>
     );
-
 }
 
 Dropdown.Trigger = Trigger;

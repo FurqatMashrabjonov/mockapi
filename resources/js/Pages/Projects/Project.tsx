@@ -8,10 +8,8 @@ import Modal from "@/Components/Modal";
 import {CreateResource} from "@/Pages/Projects/Components/CreateResource";
 import {
     IconBrandOpenai,
-    IconDatabaseExport,
     IconDotsVertical, IconEdit, IconFileExport,
-    IconHttpPost,
-    IconPlus, IconTableExport,
+    IconPlus,
     IconTrash
 } from "@tabler/icons-react";
 import SecondaryButton from "@/Components/SecondaryButton";
@@ -22,6 +20,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import {Tooltip} from "react-tooltip";
 import DeleteProject from "@/Pages/Projects/Components/DeleteProject";
+import UpdateProject from "@/Pages/Projects/Components/UpdateProject";
 
 export default function Dashboard({project, maxFields, auth}: PageProps<{
     fields: Object,
@@ -32,6 +31,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
     const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false)
     const [showAIGenerateModal, setShowAIGenerateModal] = useState(false)
+    const [showEditProject, setShowEditProject] = useState(false)
     const [resources, setResources] = useState([])
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
@@ -72,6 +72,14 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
 
     const closeShowDeleteProjectModal = () => {
         setShowDeleteProjectModal(false)
+    }
+
+    const openEditProjectModal = () => {
+        setShowEditProject(true)
+    }
+
+    const closeEditProjectModal = () => {
+        setShowEditProject(false)
     }
 
     const getResources = () => {
@@ -116,9 +124,6 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                     <div>
                         Projects /
                     </div>
-                    {/*<div className="w-1/12">*/}
-                    {/*    <div className="rounded-full" dangerouslySetInnerHTML={{__html: project.avatar}}></div>*/}
-                    {/*</div>*/}
                     <div className="ml-2">
                         {project.name}
                     </div>
@@ -138,7 +143,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
 
                             </div>
                             <Dropdown.Content>
-                                <Dropdown.Button onClick={openShowDeleteProjectModal}>
+                                <Dropdown.Button onClick={openEditProjectModal}>
                                     <IconEdit size="20" /> <h6 className="ml-2">Edit</h6>
                                 </Dropdown.Button>
                                 <Dropdown.Button onClick={openShowDeleteProjectModal}>
@@ -175,39 +180,6 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                                 <SecondaryButton type="button" onClick={resetAll} className="ml-2">
                                     Reset All
                                 </SecondaryButton>
-
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md ml-2">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
-                                            >
-                                                Export
-
-                                                <svg
-                                                    className="ms-2 -me-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                        <Dropdown.Link href={route('logout')} method="post" as="button">
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
                             </div>
                         </div>
                     </div>
@@ -237,7 +209,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                                         started</p>
                                 </div>
                             }
-                            <Relations resources={resources} auth={auth} nodeConnections={nodes} edgeConnections={edges}/>
+                            <Relations auth={auth} nodeConnections={nodes} edgeConnections={edges}/>
                         </div>
                     </div>
                 </div>
@@ -254,6 +226,11 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
             <Modal show={showDeleteProjectModal} onClose={closeShowDeleteProjectModal} maxWidth="xl">
                 <DeleteProject project={project} closeModal={closeAIGenerateModal} auth={auth}/>
             </Modal>
+
+            <Modal show={showEditProject} onClose={closeEditProjectModal} maxWidth="2xl">
+                <UpdateProject project={project} closeModal={closeEditProjectModal} auth={auth}/>
+            </Modal>
+
         </AuthenticatedLayout>
     );
 }

@@ -212,7 +212,7 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                     }}
                                 >
                                     {Object.entries(fields[field.category] || {}).map(([fieldName, fieldValue]) => (
-                                        <option key={fieldName} value={fieldValue}>{fieldValue}</option>
+                                        <option key={fieldName} value={fieldValue as string}>{fieldValue as string}</option>
                                     ))}
                                 </select>
                             )}
@@ -229,7 +229,7 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                 </SecondaryButton>
                             )}
                         </div>
-                        <InputError message={formatErrorMessage(formatErrorMessage(errors[`fields.${index}.type`]))}
+                        <InputError message={formatErrorMessage(formatErrorMessage((errors as any)[`fields.${index}.type`]))}
                                     className="mt-2"/>
                     </div>
                 ))
@@ -241,7 +241,7 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                 </SecondaryButton>
 
             </div>
-            <div className="mt-6 flex justify-end" style={footerButton}>
+            <div className="mt-6 flex justify-end">
                 <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
                 <PrimaryButton className="ms-3" disabled={processing}>
@@ -250,12 +250,4 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
             </div>
         </form>
     )
-}
-
-const footerButton = {
-    position: 'sticky',
-    bottom: '0',
-    background: 'white', /* or any color that matches your modal background */
-    padding: '10px', /* optional: for some space around the button */
-
 }

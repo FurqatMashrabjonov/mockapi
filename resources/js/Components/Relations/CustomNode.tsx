@@ -5,7 +5,7 @@ import {UpdateResource} from "@/Pages/Projects/Components/UpdateResource";
 import toast from "react-hot-toast";
 
 
-function CustomNode({data: {resource, rest_api_doc}}: NodeProps) {
+function CustomNode({data: {resource, rest_api_doc, auth}}: NodeProps) {
 
     const [isToolbarVisible, setIsToolbarVisible] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -42,7 +42,7 @@ function CustomNode({data: {resource, rest_api_doc}}: NodeProps) {
             </div>
 
             <Modal show={showUpdateModal} onClose={closeUpdateModal} maxWidth="5xl">
-                <UpdateResource resource={resource} closeModal={closeUpdateModal} restApis={rest_api_doc} auth={{}}/>
+                <UpdateResource resource={resource} closeModal={closeUpdateModal} restApis={rest_api_doc} auth={auth}/>
             </Modal>
 
         </>

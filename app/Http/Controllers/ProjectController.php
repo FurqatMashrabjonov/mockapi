@@ -73,11 +73,11 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    //    public function update(ProjectRequest $request, Project $project)
-    //    {
-    //        $project->update($request->validated());
-    //        return success_response($project->toArray());
-    //    }
+        public function update(ProjectRequest $request, Project $project)
+        {
+            $project->update($request->validated());
+            return redirect(route('projects.show', ['project' => $project], absolute: false));
+        }
 
     /**
      * Remove the specified resource from storage.
