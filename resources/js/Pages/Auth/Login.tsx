@@ -84,7 +84,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     <SecondaryButton onClick={() => {location.href= route('social-login.redirect', 'github')}} className="ms-4 mt-4" disabled={processing}>
                         <IconBrandGithub className="h-4 w-4" />Login with GitHub
                     </SecondaryButton>
-                    <SecondaryButton onClick={() => {location.href= route('social-login.redirect', 'github')}} className="ms-4 mt-4" disabled={processing}>
+                    <SecondaryButton onClick={() => {location.href= route('social-login.redirect', 'google')}} className="ms-4 mt-4" disabled={processing}>
                         <IconBrandGoogle className="h-4 w-4" />Login with Google
                     </SecondaryButton>
                 </div>
