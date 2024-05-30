@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Resource;
 use App\Services\FakeFiller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -77,8 +78,12 @@ class DataController extends Controller
         return success_response($resourceData->only('data')['data']);
     }
 
-    public function generateAll(Project $project): RedirectResponse
+    public function generateAll(Project $project): RedirectResponse|JsonResponse
     {
+        if ($this->getResourcesCount($project) == 0){
+            return error_response('No resources found');
+        }
+
         ini_set('memory_limit', '1024M'); // Increases the memory limit to 1024M for this script
 
         $project->resources()->chunk(200, function ($resources) use ($project) {
@@ -87,11 +92,15 @@ class DataController extends Controller
             }
         });
 
-        return redirect()->back();
+        return redirect()->intended(route('projects.show', $project->id));
     }
 
-    public function resetAll(Project $project): RedirectResponse
+    public function resetAll(Project $project): RedirectResponse|JsonResponse
     {
+        if ($this->getResourcesCount($project) == 0){
+            return error_response('No resources found');
+        }
+
         $project->resources()->chunk(200, function ($resources) {
             foreach ($resources as $resource) {
                 $resource->data()->update(['data' => []]);
@@ -99,5 +108,10 @@ class DataController extends Controller
         });
 
         return redirect()->back();
+    }
+
+    public function getResourcesCount(Project $project): int
+    {
+        return $project->resources()->count();
     }
 }

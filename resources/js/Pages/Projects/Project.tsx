@@ -97,13 +97,20 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
     }, [])
 
     const generateAll = () => {
-        post(route('data.generate-all', {project: project}), {
-            preserveScroll: true,
-            onSuccess: () => {
-                toast.success('Resources generated successfully')
-                getResources()
-            }
-        });
+        try {
+            post(route('data.generate-all', {project: project}), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast.success('Resources generated successfully')
+                    getResources()
+                },
+                onError: () => {
+                    toast.error('Error generating ')
+                }
+            });
+        } catch (e) {
+            toast.error('Error generating data')
+        }
     }
 
     const resetAll = () => {
@@ -224,7 +231,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
             </Modal>
 
             <Modal show={showDeleteProjectModal} onClose={closeShowDeleteProjectModal} maxWidth="xl">
-                <DeleteProject project={project} closeModal={closeAIGenerateModal} auth={auth}/>
+                <DeleteProject project={project} closeModal={closeShowDeleteProjectModal} auth={auth}/>
             </Modal>
 
             <Modal show={showEditProject} onClose={closeEditProjectModal} maxWidth="2xl">

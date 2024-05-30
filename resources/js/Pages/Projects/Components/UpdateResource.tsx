@@ -10,6 +10,7 @@ import axios from "axios";
 import {IconPlus, IconX} from "@tabler/icons-react";
 import {Resource} from "@/types/project";
 import {Route} from "@/types/route";
+import toast from "react-hot-toast";
 
 
 export function UpdateResource({resource, closeModal, restApis}: PageProps<{
@@ -34,7 +35,7 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                 setFields(response.data.data);
             })
             .catch(error => {
-                console.error('There was an error!', error);
+                toast.error('There was an error!');
             });
 
     }, []);

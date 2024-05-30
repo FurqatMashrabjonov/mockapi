@@ -22,13 +22,11 @@ export default function DeleteProject({project, closeModal, auth}: PageProps<{
         processing,
         reset,
         errors,
-    } = useForm({
-        password: '',
-    });
+    } = useForm();
 
-    const confirmUserDeletion = () => {
-
-    };
+    const closeDeleteModal = () => {
+        closeModal();
+    }
 
     const deleteUser: FormEventHandler = (e) => {
         e.preventDefault();
@@ -53,7 +51,7 @@ export default function DeleteProject({project, closeModal, auth}: PageProps<{
                     </p>
 
                     <div className="mt-6 flex justify-end">
-                        <SecondaryButton type="button" onClick={closeModal}>Cancel</SecondaryButton>
+                        <SecondaryButton onClick={closeDeleteModal}>Cancel</SecondaryButton>
 
                         <DangerButton className="ms-3" disabled={processing}>
                             Delete Project
