@@ -4,12 +4,13 @@ use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RelationController;
 use App\Http\Controllers\ResourceController;
 use Illuminate\Foundation\Application;
 use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use OpenAI\Laravel\Facades\OpenAI;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -45,6 +46,17 @@ Route::get('/gemini', function () {
 
     return $result->text();
 
+});
+
+Route::get('/openai', function (){
+    $result = OpenAI::chat()->create([
+        'model' => 'gpt-3.5-turbo',
+        'messages' => [
+            ['role' => 'user', 'content' => 'Hello!'],
+        ],
+    ]);
+
+    echo $result->choices[0]->message->content;
 });
 
 Route::controller(ProjectController::class)
@@ -84,3 +96,11 @@ Route::get('/postman', function () {
     $project = \App\Models\Project::find(26);
     return \App\Services\RestApiGenerator::postman($project);
 });
+
+
+Route::controller(RelationController::class)
+    ->prefix('relations')
+    ->as('relations.')
+    ->group(function () {
+        Route::post('connect', 'connect')->name('connect');
+    });

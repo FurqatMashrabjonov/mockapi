@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.13",
         "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.9",
+        "openai-php/laravel": "^0.10.1",
         "predis/predis": "^2.2",
         "sowrensen/svg-avatar-generator": "^2.0",
         "tightenco/ziggy": "^2.0",

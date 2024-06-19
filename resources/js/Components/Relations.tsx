@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import { router } from '@inertiajs/react'
 import ReactFlow, {
     Controls,
     useNodesState,
@@ -7,9 +8,11 @@ import ReactFlow, {
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
-import {Resource} from "@/types/project";
 import {PageProps} from "@/types";
 import CustomNode from "@/Components/Relations/CustomNode";
+import {useForm} from "@inertiajs/react";
+import toast from "react-hot-toast";
+
 type Edge = {
     id: string;
     source: string;
@@ -26,19 +29,35 @@ export default function Relations({edgeConnections, nodeConnections}: PageProps<
 }>) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
     const [showUpdateModal, setShowUpdateModal] = useState(false);
+
 
     const openUpdateModal = () => {
         setShowUpdateModal(true);
     };
 
     const onConnect: OnConnect = useCallback(
-        (connection) => setEdges((eds) => addEdge(connection, eds)),
+        (connection) => {
+            connect(connection.source, connection.target);
+        },
         [setEdges],
     );
 
-    const nodeTypes = useMemo(() => ({ textUpdater: CustomNode }), []);
+    const connect = (source: string | null, destination: string | null) => {
+        router.post(route('relations.connect'), {
+            source: source,
+            destination: destination,
+        }, {
+            onSuccess: () => {
+                toast.success('Connected');
+            },
+            onError: () => {
+                toast.error('Failed to connect');
+            }
+        });
+    }
+
+    const nodeTypes = useMemo(() => ({textUpdater: CustomNode}), []);
 
     useEffect(() => {
         setNodes(nodeConnections);
@@ -61,6 +80,10 @@ export default function Relations({edgeConnections, nodeConnections}: PageProps<
                 zoomOnScroll={false}
                 minZoom={1.5}
                 maxZoom={1.5}
+                translateExtent={[
+                    [0, 0],
+                    [500, 500]
+                ]}
             >
                 <Controls
                     showZoom={false}

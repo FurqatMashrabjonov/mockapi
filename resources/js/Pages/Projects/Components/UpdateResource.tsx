@@ -8,10 +8,11 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import PrimaryButton from "@/Components/PrimaryButton";
 import axios from "axios";
 import {IconPlus, IconX} from "@tabler/icons-react";
-import {Resource} from "@/types/project";
+import {Resource, Field} from "@/types/project";
 import {Route} from "@/types/route";
 import toast from "react-hot-toast";
 
+const default_types = ['number', 'string', 'boolean', 'date', 'array', 'object'];
 
 export function UpdateResource({resource, closeModal, restApis}: PageProps<{
     resource: Resource,
@@ -22,11 +23,9 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
     const maxFields = 10;
 
     const {data, setData, post, processing, errors, reset} = useForm(resource);
-
-
-    const [fields, setFields] = useState<Array<any>>([]);
+    const [fields, setFields] = useState<Field[]>([]);
     const [showDeleteButtons, setShowDeleteButtons] = useState(Array(data.fields.length).fill(false));
-    const [selectedField, setSelectedField] = useState<Array<any>>([]);
+    const [selectedField, setSelectedField] = useState<Field[]>([]);
 
 
     useEffect(() => {
@@ -83,6 +82,7 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
     }
 
     // @ts-ignore
+    // @ts-ignore
     return (
         <form onSubmit={createResource} className="p-6 overflow-y-scroll"
               style={{maxHeight: '100vh', overflowY: 'auto'}}>
@@ -128,11 +128,11 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                                 name={`fields[${index}][name]`}
                                 disabled={index == 0}
                                 value={field.name}
-                                // onChange={(e) => {
-                                //     let newFields = [...data.fields];
-                                //     newFields[index].name = e.target.value;
-                                //     setData('fields', newFields);
-                                // }}
+                                onChange={(e) => {
+                                    let newFields: Field[] = [...data.fields];
+                                    newFields[index].name = e.target.value;
+                                    setData('fields', newFields);
+                                }}
                                 autoComplete="off"
                                 placeholder="Field name"
                                 className="w-3/12"
@@ -140,13 +140,13 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                             <select
                                 id={`category-type-${index}`}
                                 className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                value={['number', 'string', 'boolean', 'date', 'array', 'object'].includes(field.category) ? field.category : 'fakerPHP'}
+                                value={default_types.includes(field.category) ? field.category : 'fakerPHP'}
                                 disabled={index == 0}
-                                // onChange={(e) => {
-                                //     let newFields = [...data.fields];
-                                //     newFields[index].category = e.target.value;
-                                //     setData('fields', newFields);
-                                // }}
+                                onChange={(e) => {
+                                    let newFields: Field[] = [...data.fields];
+                                    newFields[index].name = e.target.value;
+                                    setData('fields', newFields);
+                                }}
                             >
                                 {index == 0 && (
                                     <option value="number">Unique ID</option>
@@ -163,21 +163,20 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                                 })}
                             </select>
 
-                            {fields[['number', 'string', 'boolean', 'date', 'array', 'object'].includes(field.category) ? field.category : 'fakerPHP'] && fields[['number', 'string', 'boolean', 'date', 'array', 'object'].includes(field.category) ? field.category : 'fakerPHP'].length > 0 && (
+                            {fields[default_types.includes(field.category) ? field.category : 'fakerPHP'] && (
                                 <select
                                     id={`field-type-${index}`}
                                     className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                     value={field.type}
-                                    // onChange={(e) => {
-                                    //     let newFields = [...data.fields];
-                                    //     newFields[index].type = e.target.value;
-                                    //     setData('fields', newFields);
-                                    //     console.log(data.fields)
-                                    // }}
+                                    onChange={(e) => {
+                                        let newFields: Field[] = [...data.fields];
+                                        newFields[index].name = e.target.value;
+                                        setData('fields', []);
+                                    }}
                                 >
-                                    {/*{Object.entries(fields[['number', 'string', 'boolean', 'date', 'array', 'object'].includes(field.category) ? field.category : 'fakerPHP'] || {}).map(([fieldName, fieldValue]) => (*/}
-                                    {/*    // <option key={fieldName} value={fieldValue}>{fieldValue}</option>*/}
-                                    {/*))}*/}
+                                    {Object.entries(fields[default_types.includes(field.category) ? field.category : 'fakerPHP'] || {}).map(([fieldName, fieldValue]) => (
+                                        <option key={fieldName} value={fieldValue}>{fieldValue}</option>
+                                    ))}
                                 </select>
                             )}
 

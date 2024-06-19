@@ -21,6 +21,7 @@ import axios from "axios";
 import {Tooltip} from "react-tooltip";
 import DeleteProject from "@/Pages/Projects/Components/DeleteProject";
 import UpdateProject from "@/Pages/Projects/Components/UpdateProject";
+import {Export} from "@/Pages/Projects/Components/Export";
 
 export default function Dashboard({project, maxFields, auth}: PageProps<{
     fields: Object,
@@ -30,6 +31,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
     const [showModal, setShowModal] = useState(false)
     const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false)
+    const [showExportModal, setShowExportModal] = useState(false)
     const [showAIGenerateModal, setShowAIGenerateModal] = useState(false)
     const [showEditProject, setShowEditProject] = useState(false)
     const [resources, setResources] = useState([])
@@ -80,6 +82,14 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
 
     const closeEditProjectModal = () => {
         setShowEditProject(false)
+    }
+
+    const openExportModal = () => {
+        setShowExportModal(true)
+    }
+
+    const closeExportModal = () => {
+        setShowExportModal(false)
     }
 
     const getResources = () => {
@@ -153,8 +163,8 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                                 <Dropdown.Button onClick={openEditProjectModal}>
                                     <IconEdit size="20" /> <h6 className="ml-2">Edit</h6>
                                 </Dropdown.Button>
-                                <Dropdown.Button onClick={openShowDeleteProjectModal}>
-                                    <IconFileExport size="20" /> <h6 className="ml-2">Export Postman</h6>
+                                <Dropdown.Button onClick={openExportModal}>
+                                    <IconFileExport size="20" /> <h6 className="ml-2">Export</h6>
                                 </Dropdown.Button>
                                 <hr className="m-1"/>
                                 <Dropdown.Button onClick={openShowDeleteProjectModal}>
@@ -236,6 +246,10 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
 
             <Modal show={showEditProject} onClose={closeEditProjectModal} maxWidth="2xl">
                 <UpdateProject project={project} closeModal={closeEditProjectModal} auth={auth}/>
+            </Modal>
+
+            <Modal show={showExportModal} onClose={closeExportModal} maxWidth="2xl">
+                <Export project={project} closeModal={closeEditProjectModal} auth={auth}/>
             </Modal>
 
         </AuthenticatedLayout>

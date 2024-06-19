@@ -10,7 +10,7 @@ export function Endpoint({projectUUID}: PageProps<{
                 API Endpoint
             </h2>
             <h5 className="font-semibold text-lg dark:text-gray-200 leading-tight">
-                https://
+                http://
                 <span
                     className="inline-flex items-center rounded-md bg-gray-50 text-gray-600 p-1 ring-1 ring-inset ring-gray-500/20">
                     {projectUUID}

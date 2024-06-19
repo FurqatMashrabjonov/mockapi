@@ -32,7 +32,10 @@ function CustomNode({data: {resource, rest_api_doc, auth}}: NodeProps) {
                  onMouseEnter={() => setIsToolbarVisible(true)}
                  onMouseLeave={() => setIsToolbarVisible(false)}
                  onClick={openUpdateModal}>
-                <Handle type="target" position={Position.Right}/>
+                <Handle
+                    style={{}}
+                    type="target"
+                    position={Position.Right}/>
                 <div
                     style={{width: '10vh', height: '3vh'}}
                     className="inline-flex items-center px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-center text-gray-700 dark:text-gray-300 tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 ">
