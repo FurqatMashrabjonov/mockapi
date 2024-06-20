@@ -11,7 +11,7 @@ import {Project} from "@/types/project";
 import PrimaryButton from "@/Components/PrimaryButton";
 
 export default function UpdateProject({project, closeModal, auth}: PageProps<{
-    project: Project;
+    project: Project | null;
     closeModal: () => void;
     auth: Object;
 
@@ -24,7 +24,7 @@ export default function UpdateProject({project, closeModal, auth}: PageProps<{
         reset,
         errors,
     } = useForm({
-        name: project.name,
+        name: project == null ? '' : project.name,
     });
 
     const updateProject: FormEventHandler = (e) => {

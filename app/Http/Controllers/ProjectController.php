@@ -84,7 +84,7 @@ class ProjectController extends Controller
     public function update(ProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
-        return redirect(route('projects.show', ['project' => $project], absolute: false));
+        return redirect()->back();
     }
 
     /**

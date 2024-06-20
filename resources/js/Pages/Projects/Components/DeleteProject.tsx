@@ -1,20 +1,17 @@
-import { useRef, useState, FormEventHandler } from 'react';
+import {FormEventHandler } from 'react';
 import DangerButton from '@/Components/DangerButton';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
-import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import {PageProps} from "@/types";
 import {Project} from "@/types/project";
 
 export default function DeleteProject({project, closeModal, auth}: PageProps<{
-    project: Project;
+    project: Project | null;
     closeModal: () => void;
     auth: Object;
 
 }>) {
+
     const {
         data,
         setData,
@@ -47,7 +44,7 @@ export default function DeleteProject({project, closeModal, auth}: PageProps<{
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        Are you sure you want to delete <span className="font-bold">{project.name}</span>?
+                        Are you sure you want to delete <span className="font-bold">{project ? project.name : ''}</span>?
                     </p>
 
                     <div className="mt-6 flex justify-end">

@@ -9,9 +9,9 @@ export default function Json(props: SVGAttributes<SVGElement>) {
                 <stop offset="0"></stop>
                 <stop offset="1" stopColor="#fff"></stop>
             </linearGradient>
-            <path fill="url(#a)" fill-rule="evenodd"
+            <path fill="url(#a)" fillRule="evenodd"
                   d="M63.895 94.303c27.433 37.398 54.281-10.438 54.241-39.205-.046-34.012-34.518-53.021-54.263-53.021C32.182 2.077 2 28.269 2 64.105 2 103.937 36.596 126 63.873 126c-6.172-.889-26.742-5.296-27.019-52.674-.186-32.044 10.453-44.846 26.974-39.214.37.137 18.223 7.18 18.223 30.187 0 22.908-18.156 30.004-18.156 30.004z"
-                  clip-rule="evenodd"></path>
+                  clipRule="evenodd"></path>
             <linearGradient id="b" x1="-579.148" x2="-666.607" y1="-364.34" y2="-276.873"
                             gradientTransform="matrix(.9988 0 0 -.9987 689.011 -259.008)"
                             gradientUnits="userSpaceOnUse">
