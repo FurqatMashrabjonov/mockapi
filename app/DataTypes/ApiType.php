@@ -11,7 +11,8 @@ class ApiType implements ArrayableInterface
         public string $route,
         public string $method,
         public ?array $parameters = [],
-        public ?array $headers = []
+        public ?array $headers = [],
+        public ?array $fields = []
     ){}
 
     public function toArray(): array
@@ -20,7 +21,8 @@ class ApiType implements ArrayableInterface
             'route' => $this->route,
             'method' => $this->method,
             'parameters' => $this->parameters,
-            'headers' => $this->headers
+            'headers' => $this->headers,
+            'fields' => $this->fields
         ];
     }
 }

@@ -92,7 +92,7 @@ class DataController extends Controller
             }
         });
 
-        return redirect()->intended(route('projects.show', $project->id));
+        return redirect()->back();
     }
 
     public function resetAll(Project $project): RedirectResponse|JsonResponse
@@ -102,6 +102,7 @@ class DataController extends Controller
         }
 
         $project->resources()->chunk(200, function ($resources) {
+            Log::info($resources);
             foreach ($resources as $resource) {
                 $resource->data()->update(['data' => []]);
             }

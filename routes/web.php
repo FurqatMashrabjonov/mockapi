@@ -68,6 +68,8 @@ Route::controller(ProjectController::class)
         Route::get('/{project}', 'show')->name('show');
         Route::post('/{project}', 'update')->name('update');
         Route::delete('/{project}', 'destroy')->name('destroy');
+
+        Route::get('/{project}/export/{tool}', 'export')->name('export');
     });
 
 Route::controller(ResourceController::class)
@@ -104,3 +106,12 @@ Route::controller(RelationController::class)
     ->group(function () {
         Route::post('connect', 'connect')->name('connect');
     });
+
+
+Route::get('/python', function (){
+   $routes = \App\Services\RestApiGenerator::generate(\App\Models\Project::find(31));
+   $export = new \App\Services\Export\Python();
+   $export->routes($routes);
+   $export->generate();
+   dd($export->text());
+});

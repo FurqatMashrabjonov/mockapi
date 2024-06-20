@@ -4,13 +4,12 @@ import ReactFlow, {
     Controls,
     useNodesState,
     useEdgesState,
-    addEdge, OnConnect, Position,
+    OnConnect,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import {PageProps} from "@/types";
 import CustomNode from "@/Components/Relations/CustomNode";
-import {useForm} from "@inertiajs/react";
 import toast from "react-hot-toast";
 
 type Edge = {
@@ -50,6 +49,8 @@ export default function Relations({edgeConnections, nodeConnections}: PageProps<
         }, {
             onSuccess: () => {
                 toast.success('Connected');
+                location.reload()
+
             },
             onError: () => {
                 toast.error('Failed to connect');

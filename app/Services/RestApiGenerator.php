@@ -32,25 +32,29 @@ class RestApiGenerator
                 route: $prefix . '/' . $resource['name'],
                 method: 'GET',
                 parameters: [],
-                headers: self::getHeaders()
+                headers: self::getHeaders(),
+                fields: $resource['fields']
             ))->toArray(),
             (new ApiType(
                 route: $prefix . '/' . $resource['name'],
                 method: 'POST',
                 parameters: [],
-                headers: self::getHeaders()
+                headers: self::getHeaders(),
+                fields: $resource['fields']
             ))->toArray(),
             (new ApiType(
                 route: $prefix . '/' . $resource['name'] . '/:id',
                 method: 'PUT',
                 parameters: [],
-                headers: self::getHeaders()
+                headers: self::getHeaders(),
+                fields: $resource['fields']
             ))->toArray(),
             (new ApiType(
                 route: $prefix . '/' . $resource['name'] . '/:id',
                 method: 'DELETE',
                 parameters: [],
-                headers: self::getHeaders()
+                headers: self::getHeaders(),
+                fields: $resource['fields']
             ))->toArray()
         ];
     }
@@ -72,7 +76,7 @@ class RestApiGenerator
                 break;
             }
             $visited[] = $resource['id'];
-            $routes[$resource['name']][] = self::getRoute($resource, $parentPrefix);
+            $routes[$resource['name']] = self::getRoute($resource, $parentPrefix);
             $children = $resource['children'];
             foreach ($children as $child) {
                 if (!in_array($child, $visited)) {
@@ -90,49 +94,5 @@ class RestApiGenerator
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ];
-    }
-
-    public static function postman(Project $project)
-    {
-        $resources = self::getResources($project);
-        $postman = [
-            'info' => [
-                'name' => $project->name,
-                '_postman_id' => $project->uuid,
-                'description' => $project->description,
-                'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
-            ],
-            'item' => []
-        ];
-
-        foreach ($resources as $resource) {
-            $item = [
-                'name' => $resource['name'],
-                'item' => []
-            ];
-            $children = $resource['children'];
-            foreach ($children as $child) {
-                $item['item'][] = [
-                    'name' => $child['name'],
-                    'request' => [
-                        'method' => 'GET',
-                        'header' => self::getHeaders(),
-                        'url' => [
-                            'raw' => self::getEndpoint($project) . '/' . $resource['name'] . '/' . $child['name'],
-                            'host' => [
-                                self::getEndpoint($project)
-                            ],
-                            'path' => [
-                                $resource['name'],
-                                $child['name']
-                            ]
-                        ]
-                    ]
-                ];
-            }
-            $postman['item'][] = $item;
-        }
-
-        return $postman;
     }
 }

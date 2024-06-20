@@ -4,10 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
+use App\Services\Export\Javascript;
+use App\Services\Export\Jetbrains;
+use App\Services\Export\Json;
+use App\Services\Export\Php;
+use App\Services\Export\Postman;
+use App\Services\Export\Python;
 use App\Services\FakeFiller;
 use App\Services\Relation\EdgeGenerator;
 use App\Services\Relation\NodeGenerator;
+use App\Services\RestApiGenerator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Sowren\SvgAvatarGenerator\Enums\FontWeight;
@@ -73,11 +81,11 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-        public function update(ProjectRequest $request, Project $project)
-        {
-            $project->update($request->validated());
-            return redirect(route('projects.show', ['project' => $project], absolute: false));
-        }
+    public function update(ProjectRequest $request, Project $project)
+    {
+        $project->update($request->validated());
+        return redirect(route('projects.show', ['project' => $project], absolute: false));
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -88,4 +96,34 @@ class ProjectController extends Controller
 
         return redirect(url('/projects',));
     }
+
+    public function export(Project $project, string $tool)
+    {
+        $routes = RestApiGenerator::generate($project);
+        $class = match ($tool) {
+            'python' => Python::class,
+            'postman' => Postman::class,
+            'javascript' => Javascript::class,
+            'php' => Php::class,
+            'json' => Json::class,
+            'jetbrains' => Jetbrains::class
+
+        };
+
+        $export = new $class();
+        $export->routes($routes);
+        $export->project($project);
+        $export->endpoint(RestApiGenerator::getEndpoint($project));
+        $export->generate();
+
+        $content = $export->text();
+        $filename = $project->uuid . '.' . $export->extension();
+
+        Storage::disk('exports')->put($filename, $content);
+
+        $filePath = Storage::disk('exports')->path($filename);
+        return response()->download($filePath, $filename)->deleteFileAfterSend();
+
+    }
+
 }

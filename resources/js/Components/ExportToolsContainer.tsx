@@ -6,13 +6,15 @@ type Icon = {
     icon: any;
 }
 
-export default function ExportToolsContainer({icons, auth}: PageProps<{
-    icons: Icon[]
+export default function ExportToolsContainer({icons, selected, auth}: PageProps<{
+    icons: Icon[],
+    selected: (name: string) => void,
 }>) {
     return (
         <div className="grid grid-cols-4 gap-1">
             {icons.map((icon, index) => (
                 <div key={index}
+                     onClick={() => selected(icon.name)}
                     className="p-1 cursor-pointer flex flex-col border rounded-lg border-gray-300 hover:shadow-lg transition duration-200">
                     <div className="flex justify-center">
                         {icon.icon}

@@ -248,7 +248,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                 <UpdateProject project={project} closeModal={closeEditProjectModal} auth={auth}/>
             </Modal>
 
-            <Modal show={showExportModal} onClose={closeExportModal} maxWidth="2xl">
+            <Modal show={showExportModal} onClose={closeExportModal} maxWidth="4xl">
                 <Export project={project} closeModal={closeEditProjectModal} auth={auth}/>
             </Modal>
 
