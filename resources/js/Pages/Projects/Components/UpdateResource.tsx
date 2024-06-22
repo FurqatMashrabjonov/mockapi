@@ -17,7 +17,7 @@ const default_types = ['number', 'string', 'boolean', 'date', 'array', 'object']
 export function UpdateResource({resource, closeModal, restApis}: PageProps<{
     resource: Resource,
     closeModal: () => void,
-    restApis: Array<Array<Route>>,
+    restApis: Array<Route>,
 }>) {
 
     const maxFields = 10;
@@ -210,20 +210,22 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
             </h2>
 
             <div className="mt-4">
-                {restApis[0].map((api: Route, index: number) => (
-                    <div className="flex flex-col" key={index}>
+                {restApis.map((api: Route, index: number) => {
+                    return (
+                        <div className="flex flex-col" key={index}>
 
-                        <p className="mt-2 text-sm text-gray-600 font-bold dark:text-gray-400">
-                            {api.method}
-                        </p>
+                            <p className="mt-2 text-sm text-gray-600 font-bold dark:text-gray-400">
+                                {api.method}
+                            </p>
 
-                        <div
-                            className={"inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-md text-gray-700 dark:text-gray-300 tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"}>
-                            {api.route}
+                            <div
+                                className={"inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-md text-gray-700 dark:text-gray-300 tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"}>
+                                {api.route}
+                            </div>
                         </div>
-                    </div>
 
-                ))}
+                    );
+                })}
 
             </div>
 

@@ -11,6 +11,7 @@
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/breeze": "^2.0",
         "laravel/framework": "^11.0",
+        "laravel/octane": "^2.4",
         "laravel/pint": "^1.15",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.13",
@@ -30,6 +31,7 @@
         "ottaviano/faker-gravatar": "^0.2.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
+        "pestphp/pest-plugin-stressless": "^2.2",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
