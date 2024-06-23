@@ -54,8 +54,9 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-
     'domain' => env('APP_DOMAIN', 'mockapi.test'),
+
+    'protocol' => env('APP_PROTOCOL', 'http'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

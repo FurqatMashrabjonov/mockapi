@@ -4,15 +4,17 @@ namespace App\Services\Export;
 
 use App\Models\Project;
 use App\Services\Export\Interfaces\ExportableInterface;
-use App\Services\RestApiGenerator;
 
 class Jetbrains implements ExportableInterface
 {
-
     protected string $output = '';
+
     protected array $routes = [];
+
     protected string $endpoint = '';
+
     protected Project $project;
+
     protected string $extension = 'http';
 
     public function export(): static
@@ -40,12 +42,14 @@ class Jetbrains implements ExportableInterface
                 }
             }
         }
+
         return $this;
     }
 
     public function project(Project $project): static
     {
         $this->project = $project;
+
         return $this;
     }
 
@@ -59,6 +63,7 @@ class Jetbrains implements ExportableInterface
     public function endpoint(string $endpoint): static
     {
         $this->endpoint = $endpoint;
+
         return $this;
     }
 
@@ -69,7 +74,7 @@ class Jetbrains implements ExportableInterface
 
     public function download()
     {
-        return response()->download($this->output, $this->project->uuid . '.http');
+        return response()->download($this->output, $this->project->uuid.'.http');
         //DO not export from here
     }
 

@@ -3,234 +3,152 @@
 namespace App\Http\Controllers\Api;
 
 use App\DataTypes\ResourceNode;
+use App\Enums\ErrorMessagesEnum;
+use App\Enums\ErrorTypesEnum;
+use App\Exceptions\ErrorResponseException;
 use App\Http\Controllers\Controller;
 use App\Models\Data;
 use App\Models\Project;
 use App\Services\Relation;
 use App\Services\RouteParser;
 use App\Services\Validator;
+use App\Traits\MainTrait;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use function Laravel\Prompts\error;
 
 class MainController extends Controller
 {
+    use MainTrait;
+
+    protected Project $project;
+
+    protected ResourceNode $root;
+
+    protected ResourceNode $activeNode;
+
+    protected ?ResourceNode $parentNode;
+
+    protected Collection $data;
+
+    protected string $path;
+
     /**
      * @throws Exception
      */
     public function handler(string $project_uuid, string $path)
     {
-        $project = Project::where('uuid', $project_uuid)->first();
-        if (! $project) {
-            return error_response('Project not found');
-        }
+        $project = $this->getProject($project_uuid);
 
-        try {
-            $root = RouteParser::parsePath($path);
-        } catch (Exception $e) {
-            return error_response($e->getMessage());
-        }
+        $root = RouteParser::parsePath($path);
 
-        $relations = Relation::getParentResourcesAsPath($project);
+        $this->validatePath($project, $path);
 
-        $correspondingRelation = false;
-        foreach ($relations as $relation) {
-            if (!Relation::equalTree(RouteParser::parsePath(stripslashes($relation)), $root)) {
-                $correspondingRelation = true;
-            }
-        }
+        $dataModel = $this->getActiveNodeResource($project, $root)->data;
 
-        if (! $correspondingRelation) {
-            return error_response('Invalid path');
-        }
+        $method = request()->method();
+        error_if(! in_array($method, ['GET', 'POST', 'PUT', 'DELETE']), ErrorMessagesEnum::METHOD_NOT_ALLOWED->value);
 
-        $dataModel = $project->resources()->where('name', RouteParser::getActiveNode($root)->name)
-            ->first()
-            ->data;
+        $this->project = $project;
+        $this->root = $root;
+        $this->path = $path;
+        $this->data = collect($dataModel->data ?? []);
+        $this->activeNode = RouteParser::getActiveNode($root);
+        $this->parentNode = RouteParser::getParentNode($root);
 
-        return match (request()->method()) {
-            'GET' => $this->get($root, $dataModel),
-            'POST' => $this->post($project, $root, $dataModel),
-            'PUT' => $this->put($project, $root, $dataModel),
-            'DELETE' => $this->delete($project, $root, $dataModel),
-            default => error_response('Method not allowed 🤚', 405)
-        };
-
+        return $this->{strtolower($method)}();
     }
 
-    private function get(ResourceNode $root, Data $dataModel)
+    private function get(): JsonResponse
     {
-        $data = $dataModel->data;
-
-        $parentNode = RouteParser::getParentNode($root);
-
-        if ($parentNode != null){
-               $data = collect($data)->filter(function ($item) use ($parentNode) {
-                return $item[Str::singular($parentNode->name) . '_id'] == $parentNode->id;
-            })->values();
+        $data = $this->data;
+        if ($this->parentNode != null) {
+            $data = $data->where(Str::singular($this->parentNode->name).'_id', $this->parentNode->id)->values();
         }
 
-        $activeNode = RouteParser::getActiveNode($root);
-
-        if ($activeNode->id != 0)
-            return success_response(collect($data)->filter(function ($item) use ($activeNode) {
-                return $item['id'] == $activeNode->id;
-            })->first() ?? []);
-
-        //pagination
-        if (request()->has('page') and request()->has('limit')) {
-            $data = collect($dataModel->data)->forPage(request('page'), request('limit'))->values();
+        if (! $this->isGetAllData($this->activeNode)) {
+            return json_response($data->where('id', $this->activeNode->id)->first() ?? []);
         }
 
-        //sorting
-        if (request()->has('sortBy')) {
-            $order = (request()->has('order') and in_array(request('order'), ['asc', 'desc'])) ? request('order') : 'asc';
-            Log::debug($order);
-            $data = collect($data)->sortBy(request('sortBy'), SORT_REGULAR, $order == 'desc')->values();
-        }
-
-        //searching
-        if (request()->has('search')) {
-            $data = collect($data)->filter(function ($item) {
-                if (request()->has('field')) {
-                    return collect($item)->contains(request('field'), request('search'));
-                } else {
-                    return collect($item)->contains(request('search'));
-                }
-            })->values();
-        }
-
-        return success_response($data);
+        return json_response($this->afterFilter($data)->toArray());
     }
 
     /**
      * @throws Exception
      */
-    private function post(Project $project, ResourceNode $root, Data $dataModel)
+    private function post()
     {
 
-        $paths = Relation::getParentResourcesAsPath($project);
+        $this->validatePath($this->project, $this->path);
 
-        $correctPath = false;
-        foreach ($paths as $path) {
-            if (Relation::equalTree(RouteParser::parsePath(stripslashes($path)), $root)) {
-                $correctPath = true;
-                break;
-            }
-        }
+        $resource = $this->getActiveNodeResource($this->project, $this->root);
 
-        if (! $correctPath) {
-            return error_response('Invalid path');
-        }
+        $fieldNames = collect($resource->fields)->pluck('name')->toArray();
 
-        $resource = $project->resources()->where('name', RouteParser::getActiveNode($root)->name)
-            ->with('data')
-            ->first();
+        error_if(!$this->equalFields($fieldNames, array_keys(request()->only($fieldNames))), ErrorMessagesEnum::INVALID_PATH->value);
 
-        $fieldNames = [];
-        foreach ($resource->fields as $field) {
-            $fieldNames[] = $field['name'];
-        }
-        if (! Validator::equalFields($fieldNames, array_keys(request()->only($fieldNames)))) {
-            return error_response('Invalid fields');
-        }
-
-        $data = $dataModel->data ?? [];
-        $insert_data = array_merge(
-            ['id' => count($dataModel->data) ? collect($dataModel->data)->max('id') + 1 : 1],
-            request()->only($fieldNames));
+        $insert_data = array_merge(['id' => count($this->data) ? collect($this->data)->max('id') + 1 : 1], request()->only($fieldNames));
 
         $parent = $resource->parent()->first();
 
-        if ($parent){
-            $parentRoot = RouteParser::getParentNode($root);
-            if ($parentRoot == null){
-                return error_response('Parent data is required');
-            }else{
-                $parentID = $parentRoot->id;
-            }
-
-            $insert_data[Str::singular($parent->name) . '_id'] = $parentID;
+        if ($parent) {
+            $parentRoot = RouteParser::getParentNode($this->root);
+            error_if(is_null($parentRoot), 'Parent data is required');
+            $insert_data[Str::singular($parent->name).'_id'] = $parentRoot->id;
         }
+        $this->data[] = $insert_data;
 
-        $data[] = $insert_data;
+        $resource->data()->update(['data' => $this->data]);
 
-        $dataModel->update(['data' => $data]);
-
-        return success_response($dataModel->data);
+        return json_response($insert_data);
     }
 
-    private function put(Project $project, ResourceNode $root, Data $dataModel)
+    /**
+     * @throws ErrorResponseException
+     */
+    private function put()
     {
-        $resource = $project->resources()->where('name', RouteParser::getActiveNode($root)->name)->first();
-        $data = $dataModel->data ?? [];
+        $resource = $this->getActiveNodeResource($this->project, $this->root);
 
-        if (! $data) {
-            return error_response('Data is empty', 404);
-        }
+        error_if(empty($this->data), ErrorMessagesEnum::DATA_IS_EMPTY->value);
+        error_if($this->activeNode->id == 0, ErrorMessagesEnum::ID_IS_INCORRECT->value);
 
-        //update data with id from request
-        $activeNode = RouteParser::getActiveNode($root);
-        if ($activeNode->id == 0) {
-            return error_response('ID is incorrect');
-        }
+        $currentData = $this->data->where('id', $this->activeNode->id)->first();
 
-        $currentData = collect($data)->filter(function ($item) use ($activeNode) {
-            return $item['id'] == $activeNode->id;
-        })->first();
-        if (! $currentData) {
-            return error_response('Data not found');
-        }
+        error_if(is_null($currentData), ErrorMessagesEnum::DATA_NOT_FOUND->value);
 
-        $fieldNames = [];
-        foreach ($resource->fields as $field) {
-            $fieldNames[] = $field['name'];
-        }
+        $fieldNames = collect($resource->fields)->pluck('name')->toArray();
 
-        $data = collect($data)->map(function ($item) use ($activeNode, $fieldNames) {
-            if ($item['id'] == $activeNode->id) {
-                return array_merge($item, request()->only($fieldNames));
-            }
+        $currentData = array_merge($currentData, request()->only($fieldNames));
+        $this->data = $this->data->map(function ($item) use ($currentData) {
+            return $item['id'] == $currentData['id'] ? $currentData : $item;
+        });
 
-            return $item;
-        })->values()->toArray();
+        $resource->data()->update(['data' => $this->data]);
 
-        $dataModel->update(['data' => $data]);
-
-        //return updated data that id is equal to active node id
-        return success_response(collect($data)->filter(function ($item) use ($activeNode) {
-            return $item['id'] == $activeNode->id;
-        })->first());
-
+        return json_response($currentData);
     }
 
-    private function delete(Project $project, ResourceNode $root, Data $dataModel)
+    /**
+     * @throws ErrorResponseException
+     */
+    private function delete()
     {
+        error_if($this->activeNode->id == 0, ErrorMessagesEnum::ID_IS_INCORRECT->value);
 
-        $data = $dataModel->data ?? [];
-        if (! $data) {
-            return error_response('Data is empty', 404);
-        }
+        $currentData = $this->data->where('id', $this->activeNode->id)->first();
 
-        $activeNode = RouteParser::getActiveNode($root);
-        if ($activeNode->id == 0) {
-            return error_response('ID is incorrect');
-        }
+        error_if(is_null($currentData), ErrorMessagesEnum::DATA_NOT_FOUND->value);
 
-        //if data with id does not exist return error
-        $currentData = collect($data)->filter(function ($item) use ($activeNode) {
-            return $item['id'] == $activeNode->id;
-        })->first();
-        if (! $currentData) {
-            return error_response('Data not found');
-        }
+        $this->data = $this->data->where('id', '!=', $this->activeNode->id)->values();
 
-        $data = collect($data)->filter(function ($item) use ($activeNode) {
-            return $item['id'] != $activeNode->id;
-        })->values()->toArray();
+        $resource = $this->getActiveNodeResource($this->project, $this->root);
 
-        $dataModel->update(['data' => $data]);
+        $resource->data()->update(['data' => $this->data]);
 
-        return response()->json(['message' => 'Data deleted successfully']);
+        return json_response($currentData);
     }
 }

@@ -1,8 +1,9 @@
 import {PageProps} from "@/types";
+import {EndpointType} from "@/types/endpoint";
 
-
-export function Endpoint({projectUUID}: PageProps<{
-    projectUUID: string
+export function Endpoint({projectUUID, endpoint}: PageProps<{
+    projectUUID: string,
+    endpoint: EndpointType
 }>) {
     return (
         <div className="max-w-screen-md">
@@ -10,12 +11,12 @@ export function Endpoint({projectUUID}: PageProps<{
                 API Endpoint
             </h2>
             <h5 className="font-semibold text-lg dark:text-gray-200 leading-tight">
-                http://
+                {endpoint.protocol}://
                 <span
                     className="inline-flex items-center rounded-md bg-gray-50 text-gray-600 p-1 ring-1 ring-inset ring-gray-500/20">
-                    {projectUUID}
+                    {endpoint.project_uuid}
                 </span>
-                .<span>mockapi.uz</span>/
+                .<span>{endpoint.domain}</span>/
                 <span
                     className="inline-flex items-center rounded-md bg-pink-50 text-gray-600 p-1 ring-1 ring-inset ring-pink-700/10">
                     :resource

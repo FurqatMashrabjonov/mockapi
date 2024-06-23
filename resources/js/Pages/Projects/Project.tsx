@@ -22,11 +22,13 @@ import {Tooltip} from "react-tooltip";
 import DeleteProject from "@/Pages/Projects/Components/DeleteProject";
 import UpdateProject from "@/Pages/Projects/Components/UpdateProject";
 import {Export} from "@/Pages/Projects/Components/Export";
+import {EndpointType} from "@/types/endpoint";
 
-export default function Dashboard({project, maxFields, auth}: PageProps<{
+export default function Dashboard({project, maxFields, endpoint, auth}: PageProps<{
     fields: Object,
     maxFields: number,
     project: Project,
+    endpoint: EndpointType,
 }>) {
     const [showModal, setShowModal] = useState(false)
     const [showUpdateModal, setShowUpdateModal] = useState(false)
@@ -188,7 +190,7 @@ export default function Dashboard({project, maxFields, auth}: PageProps<{
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto whitespace-nowrap mx-auto">
-                            <Endpoint projectUUID={project.uuid} auth={auth}/>
+                            <Endpoint projectUUID={project.uuid} endpoint={endpoint} auth={auth}/>
                             <div className="flex justify-end mt-2">
                                 <SecondaryButton type="button" onClick={generateAll}>
                                     Generate All

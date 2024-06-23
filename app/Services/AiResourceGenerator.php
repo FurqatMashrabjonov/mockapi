@@ -8,7 +8,6 @@ use Gemini\Laravel\Facades\Gemini;
 
 class AiResourceGenerator
 {
-
     public function generate(?string $projectName, ?string $projectDescription, array $resources): array
     {
         $chat = Gemini::chat()
@@ -20,19 +19,18 @@ class AiResourceGenerator
             $resourcesString .= $resource['name'] ?? ', ';
         }
 
-        $response = $chat->sendMessage('generate resource for an app named "'. $projectName .'",
-         here are my resources that i already have ' . $resourcesString . ' dont repeat resources,
+        $response = $chat->sendMessage('generate resource for an app named "'.$projectName.'",
+         here are my resources that i already have '.$resourcesString.' dont repeat resources,
          resources fields should be unique and min 3 fields for each resource, feel free to add more fields if you want,
-         little bit description about the app is "'. $projectDescription .'".
-         the max number of resources is ' . config('resources.max_resources', 5) . ', be careful about cycling resources relationship. ');
+         little bit description about the app is "'.$projectDescription.'".
+         the max number of resources is '.config('resources.max_resources', 5).', be careful about cycling resources relationship. ');
         $array = json_decode($response->text(), true);
         if ($array == null) {
             return [];
-        }else{
+        } else {
             return $array;
         }
     }
-
 
     public function getChatHistory(): array
     {
@@ -49,72 +47,72 @@ class AiResourceGenerator
             Content::parse(part: 'Generate resource for an app named "Blog Post", little bit description about the app is "A simple blog post app".'),
             Content::parse(part: json_encode(
                 [
-                    "resources" => [
-                        "users" => [
+                    'resources' => [
+                        'users' => [
                             [
-                                "name" => "name",
-                                "type" => "person.name"
+                                'name' => 'name',
+                                'type' => 'person.name',
                             ],
                             [
-                                "name" => "email",
-                                "type" => "person.email"
+                                'name' => 'email',
+                                'type' => 'person.email',
                             ],
                             [
-                                "name" => "password",
-                                "type" => "string.password"
+                                'name' => 'password',
+                                'type' => 'string.password',
                             ],
                             [
-                                "name" => "avatar",
-                                "type" => "gravatar.url"
+                                'name' => 'avatar',
+                                'type' => 'gravatar.url',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
                             ],
                             [
-                                "name" => "updated_at",
-                                "type" => "date.recent"
-                            ]
-                        ],
-                        "posts" => [
-                            [
-                                "name" => "title",
-                                "type" => "text.title"
-                            ],
-                            [
-                                "name" => "content",
-                                "type" => "text.realText"
-                            ],
-                            [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'updated_at',
+                                'type' => 'date.recent',
                             ],
                         ],
-                        "comments" => [
+                        'posts' => [
                             [
-                                "name" => "content",
-                                "type" => "text.realText"
+                                'name' => 'title',
+                                'type' => 'text.title',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'content',
+                                'type' => 'text.realText',
                             ],
-                        ]
+                            [
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
+                            ],
+                        ],
+                        'comments' => [
+                            [
+                                'name' => 'content',
+                                'type' => 'text.realText',
+                            ],
+                            [
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
+                            ],
+                        ],
                     ],
-                    "relations" => [
+                    'relations' => [
                         [
-                            "destination" => "users",
-                            "source" => "posts",
+                            'destination' => 'users',
+                            'source' => 'posts',
                         ],
                         [
-                            "destination" => "users",
-                            "source" => "comments",
+                            'destination' => 'users',
+                            'source' => 'comments',
                         ],
                         [
-                            "destination" => "posts",
-                            "source" => "comments",
-                        ]
-                    ]
+                            'destination' => 'posts',
+                            'source' => 'comments',
+                        ],
+                    ],
                 ]
             ), role: Role::MODEL),
 
@@ -122,78 +120,78 @@ class AiResourceGenerator
             Content::parse(part: 'Generate resource for an app named "E-commerce", little bit description about the app is "A simple e-commerce project".'),
             Content::parse(part: json_encode(
                 [
-                    "resources" => [
-                        "users" => [
+                    'resources' => [
+                        'users' => [
                             [
-                                "name" => "name",
-                                "type" => "person.name"
+                                'name' => 'name',
+                                'type' => 'person.name',
                             ],
                             [
-                                "name" => "email",
-                                "type" => "person.email"
+                                'name' => 'email',
+                                'type' => 'person.email',
                             ],
                             [
-                                "name" => "password",
-                                "type" => "string.password"
+                                'name' => 'password',
+                                'type' => 'string.password',
                             ],
                             [
-                                "name" => "avatar",
-                                "type" => "gravatar.url"
+                                'name' => 'avatar',
+                                'type' => 'gravatar.url',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
                             ],
                             [
-                                "name" => "updated_at",
-                                "type" => "date.recent"
-                            ]
-                        ],
-                        "products" => [
-                            [
-                                "name" => "title",
-                                "type" => "text.title"
-                            ],
-                            [
-                                "name" => "description",
-                                "type" => "text.realText"
-                            ],
-                            [
-                                "name" => "price",
-                                "type" => "number.randomFloat",
-                                "args" => [2, 0, 1000]
-                            ],
-                            [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'updated_at',
+                                'type' => 'date.recent',
                             ],
                         ],
-                        "orders" => [
+                        'products' => [
                             [
-                                "name" => "total",
-                                "type" => "number.randomFloat",
-                                "args" => [2, 0, 1000]
+                                'name' => 'title',
+                                'type' => 'text.title',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'description',
+                                'type' => 'text.realText',
                             ],
-                        ]
+                            [
+                                'name' => 'price',
+                                'type' => 'number.randomFloat',
+                                'args' => [2, 0, 1000],
+                            ],
+                            [
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
+                            ],
+                        ],
+                        'orders' => [
+                            [
+                                'name' => 'total',
+                                'type' => 'number.randomFloat',
+                                'args' => [2, 0, 1000],
+                            ],
+                            [
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
+                            ],
+                        ],
                     ],
-                    "relations" => [
+                    'relations' => [
                         [
-                            "destination" => "users",
-                            "source" => "products",
+                            'destination' => 'users',
+                            'source' => 'products',
                         ],
                         [
-                            "destination" => "users",
-                            "source" => "orders",
+                            'destination' => 'users',
+                            'source' => 'orders',
                         ],
                         [
-                            "destination" => "products",
-                            "source" => "orders",
-                        ]
-                    ]
+                            'destination' => 'products',
+                            'source' => 'orders',
+                        ],
+                    ],
                 ]
             ), role: Role::MODEL),
 
@@ -201,68 +199,68 @@ class AiResourceGenerator
             Content::parse(part: 'Generate resource for an app named "Social Media", little bit description about the app is "A simple social media project".'),
             Content::parse(part: json_encode(
                 [
-                    "resources" => [
-                        "users" => [
+                    'resources' => [
+                        'users' => [
                             [
-                                "name" => "name",
-                                "type" => "person.name"
+                                'name' => 'name',
+                                'type' => 'person.name',
                             ],
                             [
-                                "name" => "email",
-                                "type" => "person.email"
+                                'name' => 'email',
+                                'type' => 'person.email',
                             ],
                             [
-                                "name" => "password",
-                                "type" => "string.password"
+                                'name' => 'password',
+                                'type' => 'string.password',
                             ],
                             [
-                                "name" => "avatar",
-                                "type" => "gravatar.url"
+                                'name' => 'avatar',
+                                'type' => 'gravatar.url',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
                             ],
                             [
-                                "name" => "updated_at",
-                                "type" => "date.recent"
-                            ]
-                        ],
-                        "posts" => [
-                            [
-                                "name" => "content",
-                                "type" => "text.realText"
-                            ],
-                            [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'updated_at',
+                                'type' => 'date.recent',
                             ],
                         ],
-                        "comments" => [
+                        'posts' => [
                             [
-                                "name" => "content",
-                                "type" => "text.realText"
+                                'name' => 'content',
+                                'type' => 'text.realText',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
                             ],
-                        ]
+                        ],
+                        'comments' => [
+                            [
+                                'name' => 'content',
+                                'type' => 'text.realText',
+                            ],
+                            [
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
+                            ],
+                        ],
                     ],
-                    "relations" => [
+                    'relations' => [
                         [
-                            "destination" => "users",
-                            "source" => "posts",
+                            'destination' => 'users',
+                            'source' => 'posts',
                         ],
                         [
-                            "destination" => "users",
-                            "source" => "comments",
+                            'destination' => 'users',
+                            'source' => 'comments',
                         ],
                         [
-                            "destination" => "posts",
-                            "source" => "comments",
-                        ]
-                    ]
+                            'destination' => 'posts',
+                            'source' => 'comments',
+                        ],
+                    ],
                 ]
             ), role: Role::MODEL),
 
@@ -270,79 +268,78 @@ class AiResourceGenerator
             Content::parse(part: 'Generate resource for an app named "Task Manager", little bit description about the app is "A simple task manager project".'),
             Content::parse(part: json_encode(
                 [
-                    "resources" => [
-                        "users" => [
+                    'resources' => [
+                        'users' => [
                             [
-                                "name" => "name",
-                                "type" => "person.name"
+                                'name' => 'name',
+                                'type' => 'person.name',
                             ],
                             [
-                                "name" => "email",
-                                "type" => "person.email"
+                                'name' => 'email',
+                                'type' => 'person.email',
                             ],
                             [
-                                "name" => "password",
-                                "type" => "string.password"
+                                'name' => 'password',
+                                'type' => 'string.password',
                             ],
                             [
-                                "name" => "avatar",
-                                "type" => "gravatar.url"
+                                'name' => 'avatar',
+                                'type' => 'gravatar.url',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
                             ],
                             [
-                                "name" => "updated_at",
-                                "type" => "date.recent"
-                            ]
-                        ],
-                        "tasks" => [
-                            [
-                                "name" => "title",
-                                "type" => "text.title"
-                            ],
-                            [
-                                "name" => "description",
-                                "type" => "text.realText"
-                            ],
-                            [
-                                "name" => "status",
-                                "type" => "boolean.boolean"
-                            ],
-                            [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'updated_at',
+                                'type' => 'date.recent',
                             ],
                         ],
-                        "comments" => [
+                        'tasks' => [
                             [
-                                "name" => "content",
-                                "type" => "text.realText"
+                                'name' => 'title',
+                                'type' => 'text.title',
                             ],
                             [
-                                "name" => "created_at",
-                                "type" => "date.recent"
+                                'name' => 'description',
+                                'type' => 'text.realText',
                             ],
-                        ]
+                            [
+                                'name' => 'status',
+                                'type' => 'boolean.boolean',
+                            ],
+                            [
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
+                            ],
+                        ],
+                        'comments' => [
+                            [
+                                'name' => 'content',
+                                'type' => 'text.realText',
+                            ],
+                            [
+                                'name' => 'created_at',
+                                'type' => 'date.recent',
+                            ],
+                        ],
                     ],
-                    "relations" => [
+                    'relations' => [
                         [
-                            "destination" => "users",
-                            "source" => "tasks",
+                            'destination' => 'users',
+                            'source' => 'tasks',
                         ],
                         [
-                            "destination" => "users",
-                            "source" => "comments",
+                            'destination' => 'users',
+                            'source' => 'comments',
                         ],
                         [
-                            "destination" => "tasks",
-                            "source" => "comments",
-                        ]
-                    ]
+                            'destination' => 'tasks',
+                            'source' => 'comments',
+                        ],
+                    ],
                 ]
             ), role: Role::MODEL),
         ];
     }
-
 }

@@ -21,6 +21,8 @@ class AuthenticatedSessionController extends Controller
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
+            'google_client_id' => config('services.google.client_id'),
+            'google_redirect_uri' => config('services.google.redirect_uri'),
         ]);
     }
 

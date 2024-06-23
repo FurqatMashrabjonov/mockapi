@@ -8,7 +8,6 @@ use App\Models\Resource;
 
 class RestApiGenerator
 {
-
     public static function generate(Project $project): array
     {
         return self::getRoutes($project);
@@ -21,41 +20,40 @@ class RestApiGenerator
 
     public static function getEndpoint(Project $project): string
     {
-        return 'https://' . $project->uuid . '.' . config('app.domain');
+        return config('app.protocol') . '://'.$project->uuid.'.'.config('app.domain');
     }
-
 
     public static function getRoute(array $resource, string $prefix = ''): array
     {
         return [
             (new ApiType(
-                route: $prefix . '/' . $resource['name'],
+                route: $prefix.'/'.$resource['name'],
                 method: 'GET',
                 parameters: [],
                 headers: self::getHeaders(),
                 fields: $resource['fields']
             ))->toArray(),
             (new ApiType(
-                route: $prefix . '/' . $resource['name'],
+                route: $prefix.'/'.$resource['name'],
                 method: 'POST',
                 parameters: [],
                 headers: self::getHeaders(),
                 fields: $resource['fields']
             ))->toArray(),
             (new ApiType(
-                route: $prefix . '/' . $resource['name'] . '/:id',
+                route: $prefix.'/'.$resource['name'].'/:id',
                 method: 'PUT',
                 parameters: [],
                 headers: self::getHeaders(),
                 fields: $resource['fields']
             ))->toArray(),
             (new ApiType(
-                route: $prefix . '/' . $resource['name'] . '/:id',
+                route: $prefix.'/'.$resource['name'].'/:id',
                 method: 'DELETE',
                 parameters: [],
                 headers: self::getHeaders(),
                 fields: $resource['fields']
-            ))->toArray()
+            ))->toArray(),
         ];
     }
 
@@ -70,7 +68,7 @@ class RestApiGenerator
             $queue[] = [$resource, '']; // 1: resource, 2: parentPrefix
         }
 
-        while (!empty($queue)) {
+        while (! empty($queue)) {
             [$resource, $parentPrefix] = array_shift($queue);
             if (in_array($resource['id'], $visited)) {
                 break;
@@ -79,8 +77,8 @@ class RestApiGenerator
             $routes[$resource['name']] = self::getRoute($resource, $parentPrefix);
             $children = $resource['children'];
             foreach ($children as $child) {
-                if (!in_array($child, $visited)) {
-                    $queue[] = [$child, $parentPrefix . '/' . $resource['name'] . '/:id'];
+                if (! in_array($child, $visited)) {
+                    $queue[] = [$child, $parentPrefix.'/'.$resource['name'].'/:id'];
                 }
             }
         }
@@ -92,7 +90,7 @@ class RestApiGenerator
     {
         return [
             'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ];
     }
 }

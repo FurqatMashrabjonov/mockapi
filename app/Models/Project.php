@@ -11,14 +11,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[ObservedBy(ProjectObserver::class)]
 class Project extends Model
 {
-
     protected $fillable = [
         'user_id',
         'name',
         'uuid',
-        'avatar'
+        'avatar',
     ];
-
 
     protected $with = ['resources'];
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
 use App\Models\Resource;
 use Illuminate\Http\Request;
 
@@ -16,16 +15,16 @@ class RelationController extends Controller
         ]);
 
         $source = Resource::query()->where('id', $data['source'])->first();
-        if (!$source){
+        if (! $source) {
             return response()->json(['message' => 'Source not found'], 404);
         }
-        if (!$data['destination']){
+        if (! $data['destination']) {
             $source->parent_id = null;
-        }else {
+        } else {
             $destination = Resource::query()->where('id', $data['destination'])->first();
-            if ($destination){
+            if ($destination) {
                 $source->parent_id = $destination->id;
-            }else{
+            } else {
                 return response()->json(['message' => 'Destination not found'], 404);
             }
         }

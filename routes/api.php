@@ -41,7 +41,6 @@ Route::get('/user', function (Request $request) {
 //        Route::post('generate/{project}/{resource}', 'generate')->name('generate');
 //    });
 
-
 Route::controller(RelationController::class)
     ->prefix('relations')
     ->as('relations.')

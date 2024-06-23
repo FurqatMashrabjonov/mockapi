@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Resource extends Model
 {
-
     protected $with = ['data', 'children'];
 
     protected $fillable = [
@@ -51,5 +49,4 @@ class Resource extends Model
     {
         return $this->hasMany(Resource::class, 'parent_id', 'id');
     }
-
 }

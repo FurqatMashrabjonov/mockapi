@@ -4,7 +4,6 @@ namespace App\Services\Export\Interfaces;
 
 interface ExportableInterface
 {
-
     public function export();
 
     public function routes(array $routes);
@@ -14,5 +13,4 @@ interface ExportableInterface
     public function download();
 
     public function isDownloadable(): bool;
-
 }

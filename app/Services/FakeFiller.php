@@ -127,7 +127,7 @@ class FakeFiller
                 'words' => ['word', []],
                 'sentence' => ['sentence', []],
                 'paragraph' => ['paragraph', []],
-                'randomLetter' => ['randomLetter', []]
+                'randomLetter' => ['randomLetter', []],
             ],
 
             /*
@@ -169,7 +169,7 @@ class FakeFiller
                 'monthName' => ['monthName', []],
                 'year' => ['year', []],
                 'century' => ['century', []],
-                'timezone' => ['timezone', []]
+                'timezone' => ['timezone', []],
             ],
 
             /*
@@ -300,7 +300,7 @@ class FakeFiller
             */
             'version' => [
                 'semver' => ['semver', []],
-            ]
+            ],
         ];
     }
 
@@ -310,10 +310,11 @@ class FakeFiller
         foreach (self::availableFields() as $fieldType => $fields) {
             if (count($fields) == 0) {
                 $availableFields[] = $fieldType;
+
                 continue;
             }
             foreach ($fields as $fieldName => $field) {
-                $availableFields[] = $fieldType . '.' . $fieldName;
+                $availableFields[] = $fieldType.'.'.$fieldName;
             }
         }
 
@@ -326,12 +327,13 @@ class FakeFiller
         foreach (self::availableFields() as $key => $availableField) {
             if (count($availableField) > 0) {
                 foreach ($availableField as $field => $value) {
-                    $fields['fakerPHP'][] = $key . '.' . $field;
+                    $fields['fakerPHP'][] = $key.'.'.$field;
                 }
             } else {
                 $fields[$key] = [];
             }
         }
+
         return $fields;
     }
 }

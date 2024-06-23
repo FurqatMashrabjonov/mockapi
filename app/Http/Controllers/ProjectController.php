@@ -14,12 +14,9 @@ use App\Services\FakeFiller;
 use App\Services\Relation\EdgeGenerator;
 use App\Services\Relation\NodeGenerator;
 use App\Services\RestApiGenerator;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Sowren\SvgAvatarGenerator\Enums\FontWeight;
-use Sowren\SvgAvatarGenerator\Facades\Svg;
 
 class ProjectController extends Controller
 {
@@ -50,7 +47,7 @@ class ProjectController extends Controller
         $project = Project::create(array_merge(
             [
                 'user_id' => auth()->id(),
-                'uuid' => uniqid(Str::slug($request->name) . '-')
+                'uuid' => uniqid(Str::slug($request->name) . '-'),
             ],
             $request->validated()
         ));
@@ -64,10 +61,17 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $fields = FakeFiller::availableFields();
+
         return Inertia::render('Projects/Project', [
             'project' => $project,
             'fields' => $fields,
             'maxFields' => 10,
+            'endpoint' => [
+                'endpoint' => RestApiGenerator::getEndpoint($project),
+                'protocol' => config('app.protocol'),
+                'domain' => config('app.domain'),
+                'project_uuid' => $project->uuid,
+            ],
             'edges' => EdgeGenerator::generate($project),
             'nodes' => NodeGenerator::generate($project),
         ]);
@@ -84,6 +88,7 @@ class ProjectController extends Controller
     public function update(ProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
+
         return redirect()->back();
     }
 
@@ -94,7 +99,7 @@ class ProjectController extends Controller
     {
         $project->delete();
 
-        return redirect(url('/projects',));
+        return redirect(url('/projects'));
     }
 
     public function export(Project $project, string $tool)
@@ -122,8 +127,8 @@ class ProjectController extends Controller
         Storage::disk('exports')->put($filename, $content);
 
         $filePath = Storage::disk('exports')->path($filename);
+
         return response()->download($filePath, $filename)->deleteFileAfterSend();
 
     }
-
 }

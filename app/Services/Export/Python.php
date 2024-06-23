@@ -4,15 +4,17 @@ namespace App\Services\Export;
 
 use App\Models\Project;
 use App\Services\Export\Interfaces\ExportableInterface;
-use App\Services\RestApiGenerator;
 
 class Python implements ExportableInterface
 {
-
     protected string $output = '';
+
     protected array $routes = [];
+
     protected string $endpoint = '';
+
     protected Project $project;
+
     protected string $extension = 'py';
 
     public function export(): static
@@ -61,6 +63,7 @@ class Python implements ExportableInterface
             $this->output .= "response = requests.delete(url + '{$route[3]['route']}', headers=headers)\n";
             $this->output .= "print(response.json())\n\n";
         }
+
         return $this;
     }
 
@@ -79,6 +82,7 @@ class Python implements ExportableInterface
     public function endpoint(string $endpoint): static
     {
         $this->endpoint = $endpoint;
+
         return $this;
     }
 
@@ -89,7 +93,7 @@ class Python implements ExportableInterface
 
     public function download()
     {
-        return response()->download($this->output, $this->project->uuid . '.py');
+        return response()->download($this->output, $this->project->uuid.'.py');
     }
 
     public function isDownloadable(): false
@@ -101,5 +105,4 @@ class Python implements ExportableInterface
     {
         return $this->extension;
     }
-
 }

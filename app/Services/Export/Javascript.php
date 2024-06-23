@@ -4,15 +4,17 @@ namespace App\Services\Export;
 
 use App\Models\Project;
 use App\Services\Export\Interfaces\ExportableInterface;
-use App\Services\RestApiGenerator;
 
 class Javascript implements ExportableInterface
 {
-
     protected string $output = '';
+
     protected array $routes = [];
+
     protected string $endpoint = '';
+
     protected Project $project;
+
     protected string $extension = 'js';
 
     public function export(): static
@@ -64,12 +66,14 @@ class Javascript implements ExportableInterface
             $this->output .= "    .then(response => response.json())\n";
             $this->output .= "    .then(data => console.log(data));\n\n";
         }
+
         return $this;
     }
 
     public function project(Project $project): static
     {
         $this->project = $project;
+
         return $this;
     }
 
@@ -83,6 +87,7 @@ class Javascript implements ExportableInterface
     public function endpoint(string $endpoint): static
     {
         $this->endpoint = $endpoint;
+
         return $this;
     }
 

@@ -4,15 +4,17 @@ namespace App\Services\Export;
 
 use App\Models\Project;
 use App\Services\Export\Interfaces\ExportableInterface;
-use App\Services\RestApiGenerator;
 
 class Php implements ExportableInterface
 {
-
     protected string $output = '';
+
     protected array $routes = [];
+
     protected string $endpoint = '';
+
     protected Project $project;
+
     protected string $extension = 'php';
 
     public function export(): static
@@ -69,6 +71,7 @@ class Php implements ExportableInterface
     public function project(Project $project): static
     {
         $this->project = $project;
+
         return $this;
     }
 
@@ -82,6 +85,7 @@ class Php implements ExportableInterface
     public function endpoint(string $endpoint): static
     {
         $this->endpoint = $endpoint;
+
         return $this;
     }
 

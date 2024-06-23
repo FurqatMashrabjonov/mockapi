@@ -6,7 +6,6 @@ use App\Models\Project;
 
 class EdgeGenerator
 {
-
     public static function generate(Project $project): array
     {
         $resources = $project->resources()->get()->toArray();
@@ -24,15 +23,15 @@ class EdgeGenerator
         foreach ($resources as $resource) {
             if ($resource['parent_id']) {
                 $edges[] = [
-                    'id' => 'horizontal-' . $resource['id'] . '-' . $resource['parent_id'],
-                    'source' => (string)$resource['id'],
+                    'id' => 'horizontal-'.$resource['id'].'-'.$resource['parent_id'],
+                    'source' => (string) $resource['id'],
                     'animated' => false,
                     'type' => 'step',
-                    'target' => (string)$resource['parent_id'],
+                    'target' => (string) $resource['parent_id'],
                 ];
             }
         }
+
         return $edges;
     }
-
 }

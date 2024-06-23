@@ -18,17 +18,10 @@ class RouteParser
         while (count($path)) {
             $name = array_shift($path);
             $value = array_shift($path);
+            $value = $value ?? 0;
 
-            if ($value == null) {
-                $value = 0;
-            }
-
-            if (! preg_match('/^[a-zA-Z0-9]+$/', $name)) {
-                throw new Exception('Invalid path');
-            }
-            if (! is_numeric($value)) {
-                throw new Exception('Invalid value');
-            }
+            error_if(! preg_match('/^[a-zA-Z0-9]+$/', $name), 'Invalid path');
+            error_if(! is_numeric($value), 'Invalid value');
 
             $cur->name = $name;
             $cur->id = $value;
@@ -59,6 +52,7 @@ class RouteParser
             $parent = $cur;
             $cur = $cur->children[0];
         }
+
         return $parent;
     }
 }

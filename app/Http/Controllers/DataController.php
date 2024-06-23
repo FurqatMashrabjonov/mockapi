@@ -20,7 +20,7 @@ class DataController extends Controller
     public function generate(Project $project, ?Resource $resource, Request $request)
     {
         Log::debug($resource->name);
-        if (!$resource) {
+        if (! $resource) {
             return error_response('Resource not found', 404);
         }
         $fields = $resource->fields;
@@ -40,7 +40,7 @@ class DataController extends Controller
 
         //generate fake data using parentIds to static fields using all parent ids
 
-        if (!$resourceData) {
+        if (! $resourceData) {
             $resourceData = $resource->data()->create();
             $data = [];
             for ($i = 0; $i < $count; $i++) {
@@ -49,7 +49,7 @@ class DataController extends Controller
                     fields: $fields,
                     count: 1,
                     idStartsFrom: $i + 1,
-                    static_fields: $parent ? [Str::singular($parent->name) . '_id' => $parentIds[$parentID]] : []
+                    static_fields: $parent ? [Str::singular($parent->name).'_id' => $parentIds[$parentID]] : []
                 ));
             }
 
@@ -65,7 +65,7 @@ class DataController extends Controller
                         fields: $fields,
                         count: 1,
                         idStartsFrom: $maxId + $i + 1,
-                        static_fields: $parent ? [Str::singular($parent->name) . '_id' => $parentIds[$parentID]] : []
+                        static_fields: $parent ? [Str::singular($parent->name).'_id' => $parentIds[$parentID]] : []
                     ));
                 }
             } else {
@@ -80,7 +80,7 @@ class DataController extends Controller
 
     public function generateAll(Project $project): RedirectResponse|JsonResponse
     {
-        if ($this->getResourcesCount($project) == 0){
+        if ($this->getResourcesCount($project) == 0) {
             return error_response('No resources found');
         }
 
@@ -97,7 +97,7 @@ class DataController extends Controller
 
     public function resetAll(Project $project): RedirectResponse|JsonResponse
     {
-        if ($this->getResourcesCount($project) == 0){
+        if ($this->getResourcesCount($project) == 0) {
             return error_response('No resources found');
         }
 

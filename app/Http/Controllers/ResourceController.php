@@ -21,7 +21,6 @@ class ResourceController extends Controller
         $this->relationController = new RelationController();
     }
 
-
     /**
      * Display a listing of the resource.
      */
@@ -57,6 +56,7 @@ class ResourceController extends Controller
             'project_id' => $project->id,
         ], $data);
         $resource->data()->create();
+
         return $resource;
     }
 
@@ -84,8 +84,10 @@ class ResourceController extends Controller
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return redirect()->back()->with('error', 'Failed to generate resources');
         }
+
         return redirect()->back();
     }
 
@@ -95,7 +97,7 @@ class ResourceController extends Controller
     public function show(Project $project, Resource $resource)
     {
         $resource = $project->resources()->find($resource->id);
-        if (!$resource) {
+        if (! $resource) {
             return error_response('Resource not found', 404);
         }
 
@@ -123,7 +125,7 @@ class ResourceController extends Controller
     public function destroy(Project $project, Resource $resource)
     {
         $resource = $project->resources()->find($resource->id);
-        if (!$resource) {
+        if (! $resource) {
             return error_response('Resource not found', 404);
         }
 

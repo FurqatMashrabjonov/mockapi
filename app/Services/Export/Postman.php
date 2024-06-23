@@ -4,17 +4,18 @@ namespace App\Services\Export;
 
 use App\Models\Project;
 use App\Services\Export\Interfaces\ExportableInterface;
-use App\Services\RestApiGenerator;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Postman implements ExportableInterface
 {
-
     protected string $output = '';
+
     protected array $routes = [];
+
     protected string $endpoint = '';
+
     protected Project $project;
+
     protected string $extension = 'json';
 
     public function export(): static
@@ -32,18 +33,18 @@ class Postman implements ExportableInterface
 
         $collection = [
             'info' => [
-                'name' => $this->project->name . ' API',
+                'name' => $this->project->name.' API',
                 '_postman_id' => Str::uuid(),
                 'description' => '',
-                'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+                'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
             ],
-            'item' => []
+            'item' => [],
         ];
 
         foreach ($this->routes as $resource => $methods) {
             $item = [
                 'name' => $resource,
-                'item' => []
+                'item' => [],
             ];
             foreach ($methods as $method) {
                 $raw = [];
@@ -58,21 +59,21 @@ class Postman implements ExportableInterface
                         'header' => [],
                         'body' => [
                             'mode' => 'raw',
-                            'raw' => in_array($method['method'], ['POST', 'PUT']) ? $raw : ''
+                            'raw' => in_array($method['method'], ['POST', 'PUT']) ? $raw : '',
                         ],
                         'url' => [
-                            'raw' => $this->endpoint . $method['route'],
+                            'raw' => $this->endpoint.$method['route'],
                             'host' => [
-                                $this->endpoint
+                                $this->endpoint,
                             ],
-                            'path' => explode('/', $method['route'])
-                        ]
-                    ]
+                            'path' => explode('/', $method['route']),
+                        ],
+                    ],
                 ];
                 foreach ($method['headers'] as $key => $value) {
                     $request['request']['header'][] = [
                         'key' => $key,
-                        'value' => $value
+                        'value' => $value,
                     ];
                 }
                 $item['item'][] = $request;
@@ -100,6 +101,7 @@ class Postman implements ExportableInterface
     public function endpoint(string $endpoint): static
     {
         $this->endpoint = $endpoint;
+
         return $this;
     }
 

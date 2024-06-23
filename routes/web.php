@@ -6,8 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RelationController;
 use App\Http\Controllers\ResourceController;
-use Illuminate\Foundation\Application;
 use Gemini\Laravel\Facades\Gemini;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 Route::controller(SocialLoginController::class)
     ->as('social-login.')
@@ -40,24 +40,6 @@ Route::controller(SocialLoginController::class)
         Route::get('{provider}', 'redirectToProvider')->name('redirect');
         Route::get('{provider}/callback', 'handleProviderCallback')->name('callback');
     });
-
-Route::get('/gemini', function () {
-    $result = Gemini::geminiPro()->generateContent('is gemini better than chatGPT?');
-
-    return $result->text();
-
-});
-
-Route::get('/openai', function (){
-    $result = OpenAI::chat()->create([
-        'model' => 'gpt-3.5-turbo',
-        'messages' => [
-            ['role' => 'user', 'content' => 'Hello!'],
-        ],
-    ]);
-
-    echo $result->choices[0]->message->content;
-});
 
 Route::controller(ProjectController::class)
     ->prefix('projects')
@@ -84,7 +66,6 @@ Route::controller(ResourceController::class)
         Route::delete('/{project}/{resource}', 'destroy')->name('destroy');
     });
 
-
 Route::controller(DataController::class)
     ->prefix('data')
     ->as('data.')
@@ -96,9 +77,9 @@ Route::controller(DataController::class)
 
 Route::get('/postman', function () {
     $project = \App\Models\Project::find(26);
+
     return \App\Services\RestApiGenerator::postman($project);
 });
-
 
 Route::controller(RelationController::class)
     ->prefix('relations')
@@ -107,11 +88,14 @@ Route::controller(RelationController::class)
         Route::post('connect', 'connect')->name('connect');
     });
 
+Route::get('/python', function () {
+    $routes = \App\Services\RestApiGenerator::generate(\App\Models\Project::find(31));
+    $export = new \App\Services\Export\Python();
+    $export->routes($routes);
+    $export->generate();
+    dd($export->text());
+});
 
-Route::get('/python', function (){
-   $routes = \App\Services\RestApiGenerator::generate(\App\Models\Project::find(31));
-   $export = new \App\Services\Export\Python();
-   $export->routes($routes);
-   $export->generate();
-   dd($export->text());
+Route::get('error', function () {
+    error_if(true, 'This is an error');
 });
