@@ -11,6 +11,7 @@ import 'reactflow/dist/style.css';
 import {PageProps} from "@/types";
 import CustomNode from "@/Components/Relations/CustomNode";
 import toast from "react-hot-toast";
+import {Resource} from "@/types/project";
 
 type Edge = {
     id: string;
@@ -21,9 +22,11 @@ type Edge = {
 };
 
 
-export default function Relations({edgeConnections, nodeConnections}: PageProps<{
+export default function Relations({edgeConnections, nodeConnections, connectedEvent, deleteResource}: PageProps<{
     edgeConnections: any[],
     nodeConnections: any[],
+    connectedEvent: () => void,
+    deleteResource: (deleted: boolean) => void,
     // project: Project,
 }>) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -48,9 +51,7 @@ export default function Relations({edgeConnections, nodeConnections}: PageProps<
             destination: destination,
         }, {
             onSuccess: () => {
-                toast.success('Connected');
-                location.reload()
-
+                connectedEvent();
             },
             onError: () => {
                 toast.error('Failed to connect');
@@ -61,6 +62,10 @@ export default function Relations({edgeConnections, nodeConnections}: PageProps<
     const nodeTypes = useMemo(() => ({textUpdater: CustomNode}), []);
 
     useEffect(() => {
+        for (let i = 0; i < nodeConnections.length; i++) {
+            nodeConnections[i].data['onDeleteResource'] = deleteResource;
+        }
+
         setNodes(nodeConnections);
         setEdges(edgeConnections);
     }, [nodeConnections, edgeConnections]);

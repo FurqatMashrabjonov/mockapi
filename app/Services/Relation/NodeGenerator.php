@@ -17,7 +17,7 @@ class NodeGenerator
         return self::generateRecursive($nodes);
     }
 
-    public static function generateRecursive(array $nodes, $visited = [], $x = 10, $y = 50): array
+    public static function generateRecursive(array $nodes, $visited = [], $x = -100, $y = 50): array
     {
         $result = [];
         foreach ($nodes as $node) {

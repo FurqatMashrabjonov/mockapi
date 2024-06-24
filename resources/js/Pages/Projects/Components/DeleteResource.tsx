@@ -3,11 +3,13 @@ import DangerButton from '@/Components/DangerButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { useForm } from '@inertiajs/react';
 import {PageProps} from "@/types";
-import {Project} from "@/types/project";
+import {Project, Resource} from "@/types/project";
+import toast from "react-hot-toast";
 
-export default function DeleteProject({project, closeModal, auth}: PageProps<{
-    project: Project | null;
+export default function DeleteResource({resource, closeModal, onDelete, auth}: PageProps<{
+    resource: Resource | null;
     closeModal: () => void;
+    onDelete: (deleted: boolean) => void;
     auth: Object;
 
 }>) {
@@ -25,33 +27,38 @@ export default function DeleteProject({project, closeModal, auth}: PageProps<{
         closeModal();
     }
 
-    const deleteUser: FormEventHandler = (e) => {
+    const deleteResource: FormEventHandler = (e) => {
         e.preventDefault();
 
-        destroy(route('projects.destroy', {project: project}), {
+        destroy(route('resources.destroy', {resource: resource}), {
             preserveScroll: true,
-            onSuccess: () => closeModal(),
-            onError: () => {},
+            onSuccess: () => {
+                closeModal()
+                onDelete(true);
+            },
+            onError: () => {
+               onDelete(false);
+            },
             onFinish: () => reset(),
         });
     };
 
     return (
         <section className={`space-y-6`}>
-                <form onSubmit={deleteUser} className="p-6">
+                <form onSubmit={deleteResource} className="p-6">
                     <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        Delete Project
+                        Delete Resource
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        Are you sure you want to delete <span className="font-bold">{project ? project.name : ''}</span>?
+                        Are you sure you want to delete <span className="font-bold">{resource ? resource.name : ''}</span>?
                     </p>
 
                     <div className="mt-6 flex justify-end">
                         <SecondaryButton onClick={closeDeleteModal}>Cancel</SecondaryButton>
 
                         <DangerButton className="ms-3" disabled={processing}>
-                            Delete Project
+                            Delete
                         </DangerButton>
                     </div>
                 </form>

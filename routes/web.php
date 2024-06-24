@@ -63,7 +63,7 @@ Route::controller(ResourceController::class)
         Route::get('/{project}', 'index')->name('index');
         Route::post('/{project}', 'createOrUpdate')->name('store');
         Route::get('/{project}/{resource}', 'show')->name('show');
-        Route::delete('/{project}/{resource}', 'destroy')->name('destroy');
+        Route::delete('{resource}', 'destroy')->name('destroy');
     });
 
 Route::controller(DataController::class)
@@ -75,12 +75,6 @@ Route::controller(DataController::class)
         Route::post('reset-all/{project}', 'resetAll')->name('reset-all');
     });
 
-Route::get('/postman', function () {
-    $project = \App\Models\Project::find(26);
-
-    return \App\Services\RestApiGenerator::postman($project);
-});
-
 Route::controller(RelationController::class)
     ->prefix('relations')
     ->as('relations.')
@@ -88,14 +82,7 @@ Route::controller(RelationController::class)
         Route::post('connect', 'connect')->name('connect');
     });
 
-Route::get('/python', function () {
-    $routes = \App\Services\RestApiGenerator::generate(\App\Models\Project::find(31));
-    $export = new \App\Services\Export\Python();
-    $export->routes($routes);
-    $export->generate();
-    dd($export->text());
-});
-
-Route::get('error', function () {
-    error_if(true, 'This is an error');
+Route::get('/login-me', function (){
+    \Illuminate\Support\Facades\Auth::login(\App\Models\User::first());
+    return redirect('/projects');
 });

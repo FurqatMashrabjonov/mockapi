@@ -49,21 +49,6 @@ export default function Login({ status, canResetPassword, google_client_id, goog
                 }} className="flex justify-center" disabled={processing}>
                     <Google width={100} className="h-4 w-4"/> &nbsp; Login with Google
                 </SecondaryButton>
-                <GoogleOAuthProvider clientId={google_client_id} children={
-                    <GoogleLogin
-                        onSuccess={credentialResponse => {
-                            console.log(credentialResponse);
-                        }}
-                        onError={() => {
-                            console.log('Login Failed');
-                        }}
-                        useOneTap
-                        auto_select={true}
-                    />
-                }>
-
-                </GoogleOAuthProvider>
-
             </div>
         </GuestLayout>
     );

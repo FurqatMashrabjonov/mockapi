@@ -122,15 +122,15 @@ class ResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project, Resource $resource)
+    public function destroy(Resource $resource)
     {
-        $resource = $project->resources()->find($resource->id);
+        $resource = Resource::find($resource->id);
         if (! $resource) {
             return error_response('Resource not found', 404);
         }
 
         $resource->delete();
 
-        return success_response([]);
+        return redirect()->back();
     }
 }

@@ -14,7 +14,7 @@ import {
 } from "@tabler/icons-react";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {CreateResourcesByAI} from "@/Pages/Projects/Components/CreateResourcesByAI";
-import {Project} from "@/types/project";
+import {Project, Resource} from "@/types/project";
 import Dropdown from "@/Components/Dropdown";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -92,6 +92,20 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
 
     const closeExportModal = () => {
         setShowExportModal(false)
+    }
+
+    const connected = () => {
+        toast.success('Connected')
+        getResources()
+    }
+
+    const onDeleteResource = (deleted: boolean) => {
+        if (deleted) {
+            toast.success('Resource deleted successfully')
+            getResources()
+        }else {
+            toast.error('Failed to delete resource')
+        }
     }
 
     const getResources = () => {
@@ -186,7 +200,7 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
         >
             <Head title={project.name}/>
 
-            <div className="py-6">
+            <div className="py-4">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto whitespace-nowrap mx-auto">
@@ -228,7 +242,7 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
                                         started</p>
                                 </div>
                             }
-                            <Relations auth={auth} nodeConnections={nodes} edgeConnections={edges}/>
+                            <Relations auth={auth} connectedEvent={connected} nodeConnections={nodes} edgeConnections={edges} deleteResource={onDeleteResource}/>
                         </div>
                     </div>
                 </div>
