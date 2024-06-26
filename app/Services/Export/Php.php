@@ -108,4 +108,17 @@ class Php implements ExportableInterface
     {
         return $this->extension;
     }
+
+    public function toArray(): array
+    {
+        return $this->generateAsAnArray();
+    }
+
+    public function generateAsAnArray(): array
+    {
+
+        //make each method as an array key => code, use this generate method
+        //to generate the code and return it as an array
+
+    }
 }

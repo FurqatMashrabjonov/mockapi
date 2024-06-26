@@ -16,10 +16,10 @@ export default function ResourceData({resource, closeModal, auth}: PageProps<{
 }>) {
 
     return (
-        <section className="space-y-6 max-h-screen">
-            <div className="p-6 max-h-screen">
+        <section className="space-y-6 p-6 max-h-lvh overscroll-y-auto">
+            <div className="h-100">
                 <ReactJson
-                    src={resource?.data}
+                    src={resource?.data?.data}
                     name={false}
                     displayDataTypes={false}
                     displayObjectSize={false}
@@ -29,8 +29,8 @@ export default function ResourceData({resource, closeModal, auth}: PageProps<{
             </div>
 
 
-            <div className="mt-6 flex justify-end position-fixed bottom-0 left-0">
-                <SecondaryButton onClick={closeModal}>Close</SecondaryButton>
+            <div className="flex justify-end">
+                <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
             </div>
         </section>
     );

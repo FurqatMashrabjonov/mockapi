@@ -1,16 +1,11 @@
 import {PageProps} from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
-import Python from "@/Components/Icons/Python";
-import React, {useEffect} from "react";
+import React from "react";
 import Jetbrains from "@/Components/Icons/Jetbrains";
 import Postman from "@/Components/Icons/Postman";
-import Javascript from "@/Components/Icons/Javascript";
-import Php from "@/Components/Icons/Php";
 import Json from "@/Components/Icons/Json";
 import ExportToolsContainer from "@/Components/ExportToolsContainer";
-import CodeViewer from "@/Components/CodeViewer";
 import {Project} from "@/types/project";
-import {router} from "@inertiajs/react";
 
 
 const icons = {

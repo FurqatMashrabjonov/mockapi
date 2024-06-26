@@ -47,8 +47,8 @@ Route::controller(ProjectController::class)
         Route::get('/{project}', 'show')->name('show');
         Route::post('/{project}', 'update')->name('update');
         Route::delete('/{project}', 'destroy')->name('destroy');
-
         Route::get('/{project}/export/{tool}', 'export')->name('export');
+        Route::post('/{project}/code-example/{language}', 'codeExample')->name('code-example');
     });
 
 Route::controller(ResourceController::class)

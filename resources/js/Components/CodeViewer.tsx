@@ -2,25 +2,22 @@ import React, {useEffect} from "react";
 import {PageProps} from "@/types";
 import CodeFlask from "codeflask";
 import Prism from 'prismjs';
-
+import '@/Styles/prism-one-light.css' // Theme
 export default function CodeViewer({code, language, auth}: PageProps<{
     code: string,
     language: string,
 }>) {
 
     useEffect(() => {
-        const flask = new CodeFlask('#editor',
-            {
-                language: 'python',
-                readonly: true,
-            });
-        // flask.addLanguage('python', Prism.languages['python']);
-
-        flask.updateCode(code);
+        Prism.highlightAll();
+        console.log(Prism.languages.php)
     }, []);
+
     return (
-            <div
-                className="border rounded-lg position-relative w-full h-full overflow-auto"
-                id="editor"></div>
+        <div className="">
+        <pre>
+          <code children={code} className={`language-${language}`}/>
+        </pre>
+        </div>
     );
 }

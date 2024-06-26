@@ -7,7 +7,7 @@ import Relations from "@/Components/Relations";
 import Modal from "@/Components/Modal";
 import {CreateResource} from "@/Pages/Projects/Components/CreateResource";
 import {
-    IconBrandOpenai,
+    IconBrandOpenai, IconCode,
     IconDotsVertical, IconEdit, IconFileExport,
     IconPlus,
     IconTrash
@@ -26,6 +26,7 @@ import {EndpointType} from "@/types/endpoint";
 import ConnectResourceTo from "@/Pages/Projects/Components/ConnectReosurceTo";
 import ReactJson from "react-json-view";
 import ResourceData from "@/Pages/Projects/Components/ResourceData";
+import {CodeExamples} from "@/Pages/Projects/Components/CodeExamples";
 
 export default function Dashboard({project, max_fields, max_resources, endpoint, auth}: PageProps<{
     fields: Object,
@@ -46,6 +47,7 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
     const [edges, setEdges] = useState([])
     const [currentResource, setCurrentResource] = useState(null)
     const [showResourceData, setShowResourceData] = useState(false)
+    const [showCodeExamples, setShowCodeExamples] = useState(false)
     const {data, setData, post, processing, errors, reset} = useForm({
         project_uuid: project.uuid,
         resource_description: 'this is simple shopping list app',
@@ -122,6 +124,13 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
         setShowResourceData(false)
     }
 
+    const openCodeExamples = () => {
+        setShowCodeExamples(true)
+    }
+
+    const closeCodeExamples = () => {
+        setShowCodeExamples(false)
+    }
 
     const setResourceData = (resource: any) => {
         setCurrentResource(resource)
@@ -226,6 +235,9 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
                                 <Dropdown.Button onClick={openExportModal}>
                                     <IconFileExport size="20" /> <h6 className="ml-2">Export</h6>
                                 </Dropdown.Button>
+                                <Dropdown.Button onClick={openCodeExamples}>
+                                    <IconCode size="20" /> <h6 className="ml-2">Code Examples</h6>
+                                </Dropdown.Button>
                                 <hr className="m-1"/>
                                 <Dropdown.Button onClick={openShowDeleteProjectModal}>
                                     <IconTrash size="20" color="red" /> <h6 className="ml-2">Delete</h6>
@@ -318,6 +330,10 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
 
             <Modal show={showExportModal} onClose={closeExportModal} maxWidth="4xl">
                 <Export project={project} closeModal={closeExportModal} auth={auth}/>
+            </Modal>
+
+            <Modal show={showCodeExamples} onClose={closeCodeExamples} maxWidth="4xl">
+                <CodeExamples project={project} closeModal={closeCodeExamples} auth={auth}/>
             </Modal>
 
             <Modal show={showConnectResourceTo} onClose={closeConnectResourceTo} maxWidth="xl">

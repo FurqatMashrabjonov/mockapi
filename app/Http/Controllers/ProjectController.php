@@ -132,4 +132,23 @@ class ProjectController extends Controller
         return response()->download($filePath, $filename)->deleteFileAfterSend();
 
     }
+
+    public function codeExample(Project $project, string $language)
+    {
+        $routes = RestApiGenerator::generate($project);
+        $class = match ($language) {
+            'python' => Python::class,
+            'javascript' => Javascript::class,
+            'php' => Php::class
+        };
+
+        $export = new $class();
+        $export->routes($routes);
+        $export->project($project);
+        $export->endpoint(RestApiGenerator::getEndpoint($project));
+        $export->generate();
+
+        $content = $export->text();
+        return success_response(['content' => $content]);
+    }
 }
