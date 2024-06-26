@@ -15,27 +15,27 @@ import {router} from "@inertiajs/react";
 
 const icons = {
     languages: [
-        {
-            name: 'Python',
-            icon: <Python width={100}/>
-        },
-        {
-            name: 'Javascript',
-            icon: <Javascript width={100}/>
-        },
-        {
-            name: 'Php',
-            icon: <Php width={100}/>
-        },
+        // {
+        //     name: 'Python',
+        //     icon: <Python width={100}/>
+        // },
+        // {
+        //     name: 'Javascript',
+        //     icon: <Javascript width={100}/>
+        // },
+        // {
+        //     name: 'Php',
+        //     icon: <Php width={100}/>
+        // },
     ],
     tools: [
         {
-            name: 'Jetbrains',
-            icon: <Jetbrains width={100}/>
-        },
-        {
             name: 'Postman',
             icon: <Postman width={100}/>
+        },
+        {
+            name: 'Jetbrains',
+            icon: <Jetbrains width={100}/>
         },
         {
             name: 'Json',
@@ -76,11 +76,11 @@ export function Export({project, closeModal, auth}: PageProps<{
                         Please select the format you would like to export the project in.
                     </p>
 
-                    <p className="mt-4 mb-1 text-gray-600 dark:text-gray-400">
-                        Programming Languages
-                    </p>
+                    {/*<p className="mt-4 mb-1 text-gray-600 dark:text-gray-400">*/}
+                    {/*    Programming Languages*/}
+                    {/*</p>*/}
 
-                    <ExportToolsContainer icons={icons.languages} selected={selected} auth={auth}/>
+                    {/*<ExportToolsContainer icons={icons.languages} selected={selected} auth={auth}/>*/}
 
                     <p className="mt-4 mb-1 text-gray-600 dark:text-gray-400">
                         Tools

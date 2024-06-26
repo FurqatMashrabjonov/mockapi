@@ -17,7 +17,7 @@ class NodeGenerator
         return self::generateRecursive($nodes);
     }
 
-    public static function generateRecursive(array $nodes, $visited = [], $x = -100, $y = 50): array
+    public static function generateRecursive(array $nodes, $visited = [], $x = 0, $y = 50): array
     {
         $result = [];
         foreach ($nodes as $node) {
@@ -39,7 +39,7 @@ class NodeGenerator
                 'dragHandle' => 'dragHandle',
             ];
             $y += 60;
-            $children = self::generateRecursive($node['children'], $visited, $x + 150, $y);
+            $children = self::generateRecursive($node['children'], $visited, $x + 200, $y);
             foreach ($children as $child) {
                 $result[] = $child;
             }

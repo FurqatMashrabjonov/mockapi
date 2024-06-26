@@ -57,6 +57,11 @@ return [
     'domain' => env('APP_DOMAIN', 'mockapi.test'),
 
     'protocol' => env('APP_PROTOCOL', 'http'),
+
+    'project' => [
+        'max_fields' => env('APP_PROJECT_MAX_FIELDS', 6),
+        'max_resources' => env('APP_PROJECT_MAX_RESOURCES', 3),
+    ],
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

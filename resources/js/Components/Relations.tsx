@@ -11,7 +11,6 @@ import 'reactflow/dist/style.css';
 import {PageProps} from "@/types";
 import CustomNode from "@/Components/Relations/CustomNode";
 import toast from "react-hot-toast";
-import {Resource} from "@/types/project";
 
 type Edge = {
     id: string;
@@ -22,11 +21,13 @@ type Edge = {
 };
 
 
-export default function Relations({edgeConnections, nodeConnections, connectedEvent, deleteResource}: PageProps<{
+export default function Relations({edgeConnections, nodeConnections, connectResources, deleteResource, setCurrentResource, showResourceData}: PageProps<{
     edgeConnections: any[],
     nodeConnections: any[],
-    connectedEvent: () => void,
     deleteResource: (deleted: boolean) => void,
+    setCurrentResource: (resource: any) => void,
+    connectResources: (source: string | null, destination: string | null) => void,
+    showResourceData: (resource: any) => void,
     // project: Project,
 }>) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -40,30 +41,19 @@ export default function Relations({edgeConnections, nodeConnections, connectedEv
 
     const onConnect: OnConnect = useCallback(
         (connection) => {
-            connect(connection.source, connection.target);
+            connectResources(connection.source, connection.target);
         },
         [setEdges],
     );
 
-    const connect = (source: string | null, destination: string | null) => {
-        router.post(route('relations.connect'), {
-            source: source,
-            destination: destination,
-        }, {
-            onSuccess: () => {
-                connectedEvent();
-            },
-            onError: () => {
-                toast.error('Failed to connect');
-            }
-        });
-    }
 
     const nodeTypes = useMemo(() => ({textUpdater: CustomNode}), []);
 
     useEffect(() => {
         for (let i = 0; i < nodeConnections.length; i++) {
             nodeConnections[i].data['onDeleteResource'] = deleteResource;
+            nodeConnections[i].data['onResourceSelected'] = setCurrentResource;
+            nodeConnections[i].data['showData'] = showResourceData;
         }
 
         setNodes(nodeConnections);

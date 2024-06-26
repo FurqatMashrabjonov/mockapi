@@ -5,6 +5,7 @@ import { useForm } from '@inertiajs/react';
 import {PageProps} from "@/types";
 import {Project, Resource} from "@/types/project";
 import toast from "react-hot-toast";
+import {IconPlugConnectedX} from "@tabler/icons-react";
 
 export default function DeleteResource({resource, closeModal, onDelete, auth}: PageProps<{
     resource: Resource | null;

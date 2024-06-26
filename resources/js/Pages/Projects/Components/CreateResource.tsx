@@ -84,8 +84,8 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
         }
         setData('fields', [...data.fields, {
             name: '',
-            category: 'number',
-            type: '',
+            category: 'fakerPHP',
+            type: 'address.city',
         }]);
     }
 
@@ -208,7 +208,6 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                         let newFields = [...data.fields];
                                         newFields[index].type = e.target.value;
                                         setData('fields', newFields);
-                                        console.log(data.fields)
                                     }}
                                 >
                                     {Object.entries(fields[field.category] || {}).map(([fieldName, fieldValue]) => (

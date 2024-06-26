@@ -65,7 +65,8 @@ class ProjectController extends Controller
         return Inertia::render('Projects/Project', [
             'project' => $project,
             'fields' => $fields,
-            'maxFields' => 10,
+            'max_fields' => config('app.project.max_fields'),
+            'max_resources' => config('app.project.max_resources'),
             'endpoint' => [
                 'endpoint' => RestApiGenerator::getEndpoint($project),
                 'protocol' => config('app.protocol'),

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RelationController;
@@ -12,13 +13,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use OpenAI\Laravel\Facades\OpenAI;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+Route::controller(IndexController::class)->group(function (){
+    Route::get('/', 'welcome')->name('welcome');
+    Route::get('docs', 'docs')->name('docs');
 });
 
 Route::redirect('/dashboard', '/projects');

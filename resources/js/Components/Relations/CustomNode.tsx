@@ -2,11 +2,11 @@ import React, {memo, useState} from 'react';
 import {Handle, NodeProps, NodeToolbar, Position} from 'reactflow';
 import Modal from "@/Components/Modal";
 import {UpdateResource} from "@/Pages/Projects/Components/UpdateResource";
-import {IconEdit, IconTrash} from "@tabler/icons-react";
+import {IconEdit, IconHierarchy2, IconPlugConnected, IconPlugConnectedX, IconTrash} from "@tabler/icons-react";
 import DeleteResource from "@/Pages/Projects/Components/DeleteResource";
 
 
-function CustomNode({data: {resource, rest_api_doc, onDeleteResource, auth}}: NodeProps) {
+function CustomNode({data: {resource, rest_api_doc, onDeleteResource, onResourceSelected, showData, auth}}: NodeProps) {
 
     const [isToolbarVisible, setIsToolbarVisible] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -27,7 +27,6 @@ function CustomNode({data: {resource, rest_api_doc, onDeleteResource, auth}}: No
         setShowDeleteModal(false);
     };
 
-    console.log(resource)
     return (
         <>
             <NodeToolbar
@@ -47,18 +46,26 @@ function CustomNode({data: {resource, rest_api_doc, onDeleteResource, auth}}: No
                     type="target"
                     position={Position.Right}/>
                 <div
-                    style={{width: '10vh', height: '3vh'}}
+                    style={{width: '12vh', height: '4vh'}}
                     className="inline-flex justify-between items-center px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-center text-gray-700 dark:text-gray-300 tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150 ">
-                    <div>{resource.data.data.length}</div>
+                    <div
+                        className="hover:rounded-full hover:border"
+                        onClick={() => showData(resource)}
+                    >{resource.data.data.length}</div>
                     <div className="flex gap-1">
+                        <IconPlugConnected
+                            className="hover:border rounded-full"
+                            style={{display: isToolbarVisible ? 'block' : 'none'}} size={17}
+                            onClick={() => onResourceSelected(resource)}
+                        />
                         <IconEdit
                             className="hover:border rounded-full"
-                            style={{display: isToolbarVisible ? 'block' : 'none'}} size={15}
+                            style={{display: isToolbarVisible ? 'block' : 'none'}} size={17}
                             onClick={openUpdateModal}
                         />
                         <IconTrash
                             className="hover:border hover:border-red rounded-full"
-                            style={{display: isToolbarVisible ? 'block' : 'none'}} color="red" size={15}
+                            style={{display: isToolbarVisible ? 'block' : 'none'}} color="red" size={17}
                             onClick={openDeleteModal}
                         />
                     </div>

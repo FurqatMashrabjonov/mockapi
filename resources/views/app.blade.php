@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta name="description" content="MockAPI is a simple tool that lets you easily mock up APIs, generate custom data, and perform operations on it using RESTful interface. MockAPI is meant to be used as a prototyping/testing/learning tool.">
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, Link, useForm} from '@inertiajs/react';
+import {Head, Link, router, useForm} from '@inertiajs/react';
 import {PageProps} from '@/types';
 import React, {useEffect, useState} from "react";
 import {Endpoint} from "@/Components/Endpoint";
@@ -23,10 +23,14 @@ import DeleteProject from "@/Pages/Projects/Components/DeleteProject";
 import UpdateProject from "@/Pages/Projects/Components/UpdateProject";
 import {Export} from "@/Pages/Projects/Components/Export";
 import {EndpointType} from "@/types/endpoint";
+import ConnectResourceTo from "@/Pages/Projects/Components/ConnectReosurceTo";
+import ReactJson from "react-json-view";
+import ResourceData from "@/Pages/Projects/Components/ResourceData";
 
-export default function Dashboard({project, maxFields, endpoint, auth}: PageProps<{
+export default function Dashboard({project, max_fields, max_resources, endpoint, auth}: PageProps<{
     fields: Object,
-    maxFields: number,
+    max_fields: number,
+    max_resources: number,
     project: Project,
     endpoint: EndpointType,
 }>) {
@@ -36,9 +40,12 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
     const [showExportModal, setShowExportModal] = useState(false)
     const [showAIGenerateModal, setShowAIGenerateModal] = useState(false)
     const [showEditProject, setShowEditProject] = useState(false)
+    const [showConnectResourceTo, setShowConnectResourceTo] = useState(false)
     const [resources, setResources] = useState([])
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
+    const [currentResource, setCurrentResource] = useState(null)
+    const [showResourceData, setShowResourceData] = useState(false)
     const {data, setData, post, processing, errors, reset} = useForm({
         project_uuid: project.uuid,
         resource_description: 'this is simple shopping list app',
@@ -94,9 +101,31 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
         setShowExportModal(false)
     }
 
-    const connected = () => {
-        toast.success('Connected')
-        getResources()
+    const openConnectResourceTo = () => {
+        setShowConnectResourceTo(true)
+    }
+
+    const closeConnectResourceTo = () => {
+        setShowConnectResourceTo(false)
+    }
+
+    const currentResourceSelected = (resource: any) => {
+        setCurrentResource(resource)
+        openConnectResourceTo()
+    }
+
+    const openResourceData = () => {
+        setShowResourceData(true)
+    }
+
+    const closeResourceData = () => {
+        setShowResourceData(false)
+    }
+
+
+    const setResourceData = (resource: any) => {
+        setCurrentResource(resource)
+        openResourceData()
     }
 
     const onDeleteResource = (deleted: boolean) => {
@@ -117,6 +146,21 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
             })
     }
 
+    const connectResources = (source: string | null, destination: string | null) => {
+        router.post(route('relations.connect'), {
+            source: source,
+            destination: destination,
+        }, {
+            onSuccess: () => {
+                toast.success('Connected')
+                getResources()
+                closeConnectResourceTo()
+            },
+            onError: () => {
+                toast.error('Failed to connect');
+            }
+        });
+    }
 
     useEffect(() => {
         getResources()
@@ -226,12 +270,12 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
                                 Resources
                             </h2>
                             <div>
-                                <SecondaryButton disabled={resources.length == 5} onClick={openModal}>
-                                    <IconPlus size={15}/> &nbsp; Create
+                                <SecondaryButton disabled={resources.length >= max_resources} onClick={openModal}>
+                                    <IconPlus size={15}/> &nbsp; Create ({max_resources - resources.length})
                                 </SecondaryButton>
-                                <SecondaryButton className="ml-2" disabled={resources.length == 5} onClick={openAIGenerateModal}>
-                                    <IconBrandOpenai size={15}/> &nbsp; Generate With AI
-                                </SecondaryButton>
+                                {/*<SecondaryButton className="ml-2" disabled={resources.length == 5} onClick={openAIGenerateModal}>*/}
+                                {/*    <IconBrandOpenai size={15}/> &nbsp; Generate With AI*/}
+                                {/*</SecondaryButton>*/}
                             </div>
                         </div>
                         <div className="pl-6 pr-6 text-gray-900 dark:text-gray-100">
@@ -242,14 +286,22 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
                                         started</p>
                                 </div>
                             }
-                            <Relations auth={auth} connectedEvent={connected} nodeConnections={nodes} edgeConnections={edges} deleteResource={onDeleteResource}/>
+                            <Relations
+                                auth={auth}
+                                nodeConnections={nodes}
+                                edgeConnections={edges}
+                                deleteResource={onDeleteResource}
+                                setCurrentResource={currentResourceSelected}
+                                connectResources={connectResources}
+                                showResourceData={setResourceData}
+                            />
                         </div>
                     </div>
                 </div>
             </div>
 
             <Modal show={showModal} onClose={closeModal} maxWidth="5xl">
-                <CreateResource project={project} maxFields={maxFields} auth={auth} closeModal={closeModal}/>
+                <CreateResource project={project} maxFields={max_fields} auth={auth} closeModal={closeModal}/>
             </Modal>
 
             <Modal show={showAIGenerateModal} onClose={closeAIGenerateModal} maxWidth="5xl">
@@ -266,6 +318,14 @@ export default function Dashboard({project, maxFields, endpoint, auth}: PageProp
 
             <Modal show={showExportModal} onClose={closeExportModal} maxWidth="4xl">
                 <Export project={project} closeModal={closeExportModal} auth={auth}/>
+            </Modal>
+
+            <Modal show={showConnectResourceTo} onClose={closeConnectResourceTo} maxWidth="xl">
+                <ConnectResourceTo resources={resources} currentResource={currentResource} connectResources={connectResources} auth={auth}/>
+            </Modal>
+
+            <Modal show={showResourceData} onClose={closeResourceData} maxWidth="xl">
+                <ResourceData closeModal={closeResourceData} resource={currentResource} auth={auth} />
             </Modal>
 
         </AuthenticatedLayout>

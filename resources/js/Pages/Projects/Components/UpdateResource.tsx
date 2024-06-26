@@ -64,11 +64,11 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
         if (fieldsCount >= maxFields) {
             return;
         }
-        // setData('fields', [...data.fields, {
-        //     name: '',
-        //     category: 'number',
-        //     type: '',
-        // }]);
+        setData('fields', [...data.fields, {
+            name: '',
+            category: 'FakerPHP',
+            type: 'person.firstName',
+        }]);
     }
 
     const deleteField = (index: number) => {
@@ -87,7 +87,7 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
         <form onSubmit={createResource} className="p-6 overflow-y-scroll"
               style={{maxHeight: '100vh', overflowY: 'auto'}}>
             <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                Update Resource
+                Create Resource
             </h2>
 
             <div className="mt-6">
@@ -118,6 +118,27 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                     Define Resource schema, it will be used to generate mock data.
                 </p>
 
+                <div>
+                    <div className="flex align-items-center mt-2">
+                        <TextInput
+                            id={`field-name-id`}
+                            disabled={true}
+                            value="id"
+                            autoComplete="off"
+                            placeholder="Field name"
+                            className="w-3/12"
+                        />
+                        <select
+                            id={`category-type-id`}
+                            className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                            value={'Object ID'}
+                            disabled={true}
+                        >
+                            <option value="number">Unique ID</option>
+                        </select>
+                    </div>
+                </div>
+
                 {data.fields.map((field: any, index: number) => (
                     <div key={index}>
                         <div className="flex align-items-center mt-2" key={index}>
@@ -126,10 +147,9 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                                 type="text"
                                 required
                                 name={`fields[${index}][name]`}
-                                disabled={index == 0}
                                 value={field.name}
                                 onChange={(e) => {
-                                    let newFields: Field[] = [...data.fields];
+                                    let newFields = [...data.fields];
                                     newFields[index].name = e.target.value;
                                     setData('fields', newFields);
                                 }}
@@ -140,11 +160,10 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                             <select
                                 id={`category-type-${index}`}
                                 className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                value={default_types.includes(field.category) ? field.category : 'fakerPHP'}
-                                disabled={index == 0}
+                                value={field.category}
                                 onChange={(e) => {
-                                    let newFields: Field[] = [...data.fields];
-                                    newFields[index].name = e.target.value;
+                                    let newFields = [...data.fields];
+                                    newFields[index].category = e.target.value;
                                     setData('fields', newFields);
                                 }}
                             >
@@ -163,19 +182,20 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                                 })}
                             </select>
 
-                            {fields[default_types.includes(field.category) ? field.category : 'fakerPHP'] && (
+                            {fields[field.category] && (
                                 <select
                                     id={`field-type-${index}`}
                                     className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                     value={field.type}
                                     onChange={(e) => {
-                                        let newFields: Field[] = [...data.fields];
-                                        newFields[index].name = e.target.value;
-                                        setData('fields', []);
+                                        let newFields = [...data.fields];
+                                        newFields[index].type = e.target.value;
+                                        setData('fields', newFields);
                                     }}
                                 >
-                                    {Object.entries(fields[default_types.includes(field.category) ? field.category : 'fakerPHP'] || {}).map(([fieldName, fieldValue]) => (
-                                        <option key={fieldName} value={fieldValue}>{fieldValue}</option>
+                                    {Object.entries(fields[field.category] || {}).map(([fieldName, fieldValue]) => (
+                                        <option key={fieldName}
+                                                value={fieldValue as string}>{fieldValue as string}</option>
                                     ))}
                                 </select>
                             )}
@@ -192,8 +212,9 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
                                 </SecondaryButton>
                             )}
                         </div>
-                        <InputError message={formatErrorMessage(formatErrorMessage((errors as any)[`fields.${index}.type`]))}
-                                    className="mt-2"/>
+                        <InputError
+                            message={formatErrorMessage(formatErrorMessage((errors as any)[`fields.${index}.type`]))}
+                            className="mt-2"/>
                     </div>
                 ))
                 }
@@ -205,29 +226,6 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
 
             </div>
 
-            <h2 className="text-lg mt-6 font-medium text-gray-900 dark:text-gray-100">
-                Endpoints
-            </h2>
-
-            <div className="mt-4">
-                {restApis.map((api: Route, index: number) => {
-                    return (
-                        <div className="flex flex-col" key={index}>
-
-                            <p className="mt-2 text-sm text-gray-600 font-bold dark:text-gray-400">
-                                {api.method}
-                            </p>
-
-                            <div
-                                className={"inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-md text-gray-700 dark:text-gray-300 tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25 transition ease-in-out duration-150"}>
-                                {api.route}
-                            </div>
-                        </div>
-
-                    );
-                })}
-
-            </div>
 
             <div className="mt-6 flex justify-end">
                 <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
@@ -238,12 +236,4 @@ export function UpdateResource({resource, closeModal, restApis}: PageProps<{
             </div>
         </form>
     )
-}
-
-const footerButton = {
-    position: 'sticky',
-    bottom: '0',
-    background: 'white', /* or any color that matches your modal background */
-    padding: '10px', /* optional: for some space around the button */
-
 }
