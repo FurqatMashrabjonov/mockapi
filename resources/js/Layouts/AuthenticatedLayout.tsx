@@ -1,4 +1,4 @@
-import {useState, PropsWithChildren, ReactNode, useEffect} from 'react';
+import React, {useState, PropsWithChildren, ReactNode, useEffect} from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
@@ -37,7 +37,8 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                     <div className="shrink-0 flex items-center">
                                         <Link className="flex justify-center align-items-center" href="/">
                                             <h1 className="text-center h-9 w-auto fill-current text-gray-800 dark:text-gray-200">
-                                                MOCKAPI.UZ
+                                                <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+
                                             </h1>
                                         </Link>
                                     </div>
