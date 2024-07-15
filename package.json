@@ -42,8 +42,10 @@
         "react-helmet": "^6.1.0",
         "react-hot-toast": "^2.4.1",
         "react-json-view": "^1.21.3",
+        "react-markdown": "^9.0.1",
         "react-tooltip": "^5.26.4",
         "reactflow": "^11.11.3",
+        "remark-gfm": "^4.0.0",
         "styled-components": "^6.1.11",
         "tailwind-merge": "^2.3.0",
         "ua-parser-js": "^1.0.38"

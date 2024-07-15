@@ -7,13 +7,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RelationController;
 use App\Http\Controllers\ResourceController;
-use Gemini\Laravel\Facades\Gemini;
-use Illuminate\Foundation\Application;
+use App\Services\AimlApiService;
+use App\Services\Export\Javascript;
+use App\Services\RestApiGenerator;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use OpenAI\Laravel\Facades\OpenAI;
 
-Route::controller(IndexController::class)->group(function (){
+Route::controller(IndexController::class)->group(function () {
     Route::get('/', 'welcome')->name('welcome');
     Route::get('docs', 'docs')->name('docs');
 });
@@ -48,7 +47,7 @@ Route::controller(ProjectController::class)
         Route::post('/{project}', 'update')->name('update');
         Route::delete('/{project}', 'destroy')->name('destroy');
         Route::get('/{project}/export/{tool}', 'export')->name('export');
-        Route::post('/{project}/code-example/{language}', 'codeExample')->name('code-example');
+        Route::post('/{project}/code-examples/{language}', 'codeExample')->name('code.examples');
     });
 
 Route::controller(ResourceController::class)
@@ -79,7 +78,47 @@ Route::controller(RelationController::class)
         Route::post('connect', 'connect')->name('connect');
     });
 
-Route::get('/login-me', function (){
+Route::get('/login-me', function () {
     \Illuminate\Support\Facades\Auth::login(\App\Models\User::first());
+
     return redirect('/projects');
+});
+
+Route::get('/code', function () {
+    $project = \App\Models\Project::find(35);
+    $routes = RestApiGenerator::generate($project);
+
+    $export = new Javascript();
+    $export->routes($routes);
+    $export->project($project);
+    $export->endpoint(RestApiGenerator::getEndpoint($project));
+    $export->generate();
+
+    $content = $export->text();
+
+    return view('code', compact('content'));
+});
+
+Route::get('/code-api', function () {
+    $project = \App\Models\Project::find(35);
+    $routes = RestApiGenerator::generate($project);
+
+    $export = new Javascript();
+    $export->routes($routes);
+    $export->project($project);
+    $export->endpoint(RestApiGenerator::getEndpoint($project));
+    $export->generate();
+
+    $content = $export->text();
+
+    return response()->json([
+        'content' => $content,
+    ]);
+})->name('code-api');
+
+Route::get('/ai-generate', function () {
+    $engine = new AimlApiService();
+    $project = \App\Models\Project::with('resources')->find(36);
+    $res = $engine->generate($project->name, 'this is simple Todo app', $project->resources->toArray());
+    dd($res);
 });

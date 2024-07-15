@@ -20,7 +20,7 @@ class RestApiGenerator
 
     public static function getEndpoint(Project $project): string
     {
-        return config('app.protocol') . '://'.$project->uuid.'.'.config('app.domain');
+        return config('app.protocol').'://'.$project->uuid.'.'.config('app.domain');
     }
 
     public static function getRoute(array $resource, string $prefix = ''): array

@@ -12,8 +12,7 @@ class ApiType implements ArrayableInterface
         public ?array $parameters = [],
         public ?array $headers = [],
         public ?array $fields = []
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

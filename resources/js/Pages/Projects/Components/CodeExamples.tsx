@@ -1,32 +1,33 @@
 import {PageProps} from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
 import Python from "@/Components/Icons/Python";
-import React from "react";
+import React, {useState} from "react";
 import Javascript from "@/Components/Icons/Javascript";
 import Php from "@/Components/Icons/Php";
-import ExportToolsContainer from "@/Components/ExportToolsContainer";
 import CodeViewer from "@/Components/CodeViewer";
 import {Project} from "@/types/project";
 import axios from "axios";
-import {useForm} from "@inertiajs/react";
 
-
-const icons = {
-    languages: [
-        {
-            name: 'Python',
-            icon: <Python width={100}/>
-        },
-        {
-            name: 'Javascript',
-            icon: <Javascript width={100}/>
-        },
-        {
-            name: 'Php',
-            icon: <Php width={100}/>
-        },
-    ],
+type Icon = {
+    name: string;
+    icon: any;
 }
+
+const icons: Icon[] = [
+
+    {
+        name: 'python',
+        icon: <Python width={100}/>
+    },
+    {
+        name: 'javascript',
+        icon: <Javascript width={100}/>
+    },
+    {
+        name: 'php',
+        icon: <Php width={100}/>
+    },
+]
 
 
 export function CodeExamples({project, closeModal, auth}: PageProps<{
@@ -34,30 +35,11 @@ export function CodeExamples({project, closeModal, auth}: PageProps<{
     closeModal: () => void,
 }>) {
 
-    const [selectedLanguage, setSelectedLanguage] = React.useState<string>('');
+    const [lang, setLang] = useState('');
     const [code, setCode] = React.useState<string>('');
-    const {data, setData, post, processing, errors, reset} = useForm({
-        project: project,
-        language: selectedLanguage
-    });
 
     const closeExportModal = () => {
         closeModal();
-    }
-
-    const selected = (language: string) => {
-        setSelectedLanguage(String(language).toLowerCase())
-        data.language = selectedLanguage
-        getCode(selectedLanguage)
-
-    }
-
-    const getCode = (language: string) => {
-        post(route('projects.code-example'), {
-            onSuccess: (response) => {
-                console.log(response)
-            }
-        },)
     }
 
     return (
@@ -71,8 +53,25 @@ export function CodeExamples({project, closeModal, auth}: PageProps<{
                     Please select the format you would like to see the code examples in.
                 </p>
 
-                {code && <CodeViewer code={code} language={selectedLanguage} auth={auth}/>}
-                {!code && <ExportToolsContainer icons={icons.languages} selected={selected} auth={auth}/>}
+                {code && <CodeViewer code={code} language={lang} auth={auth}/>}
+                {!code && (
+                    <div className="grid grid-cols-4 gap-1">
+                        {/*{icons.map((icon, index) => (*/}
+                        {/*    <div key={index}*/}
+                        {/*         onClick={() => languageSelected(icon.name)}*/}
+                        {/*         className="p-1 cursor-pointer flex flex-col border rounded-lg border-gray-300 hover:shadow-lg transition duration-200">*/}
+                        {/*        <div className="flex justify-center">*/}
+                        {/*            {icon.icon}*/}
+                        {/*        </div>*/}
+                        {/*        <p className="mt-1 text-center  text-gray-600 dark:text-gray-400">*/}
+                        {/*            {icon.name}*/}
+                        {/*        </p>*/}
+                        {/*    </div>*/}
+                        {/*))}*/}
+
+
+                    </div>
+                )}
 
                 <div className="mt-6 flex justify-end">
                     <SecondaryButton onClick={closeExportModal}>Cancel</SecondaryButton>

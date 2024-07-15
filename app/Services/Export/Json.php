@@ -57,10 +57,7 @@ class Json implements ExportableInterface
         return $this->output;
     }
 
-    public function download()
-    {
-
-    }
+    public function download() {}
 
     public function isDownloadable(): false
     {

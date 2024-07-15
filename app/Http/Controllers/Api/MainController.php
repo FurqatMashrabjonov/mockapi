@@ -4,21 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\DataTypes\ResourceNode;
 use App\Enums\ErrorMessagesEnum;
-use App\Enums\ErrorTypesEnum;
 use App\Exceptions\ErrorResponseException;
 use App\Http\Controllers\Controller;
-use App\Models\Data;
 use App\Models\Project;
-use App\Services\Relation;
 use App\Services\RouteParser;
-use App\Services\Validator;
 use App\Traits\MainTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use function Laravel\Prompts\error;
 
 class MainController extends Controller
 {
@@ -88,7 +82,7 @@ class MainController extends Controller
 
         $fieldNames = collect($resource->fields)->pluck('name')->toArray();
 
-        error_if(!$this->equalFields($fieldNames, array_keys(request()->only($fieldNames))), ErrorMessagesEnum::INVALID_PATH->value);
+        error_if(! $this->equalFields($fieldNames, array_keys(request()->only($fieldNames))), ErrorMessagesEnum::INVALID_PATH->value);
 
         $insert_data = array_merge(['id' => count($this->data) ? collect($this->data)->max('id') + 1 : 1], request()->only($fieldNames));
 

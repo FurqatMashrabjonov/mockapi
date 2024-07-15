@@ -86,5 +86,4 @@ trait MainTrait
     {
         return Validator::equalFields($fields1, $fields2);
     }
-
 }

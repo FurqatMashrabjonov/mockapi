@@ -13,6 +13,7 @@ class IndexController extends Controller
         if (auth()->check()) {
             return redirect()->route('dashboard');
         }
+
         return Inertia::render('Welcome');
     }
 

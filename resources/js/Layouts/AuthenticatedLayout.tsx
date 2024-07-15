@@ -35,8 +35,10 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                             <div className="flex justify-between h-16">
                                 <div className="flex">
                                     <div className="shrink-0 flex items-center">
-                                        <Link href="/">
-                                            <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                        <Link className="flex justify-center align-items-center" href="/">
+                                            <h1 className="text-center h-9 w-auto fill-current text-gray-800 dark:text-gray-200">
+                                                MOCKAPI.UZ
+                                            </h1>
                                         </Link>
                                     </div>
 

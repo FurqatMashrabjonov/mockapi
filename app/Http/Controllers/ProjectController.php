@@ -14,6 +14,7 @@ use App\Services\FakeFiller;
 use App\Services\Relation\EdgeGenerator;
 use App\Services\Relation\NodeGenerator;
 use App\Services\RestApiGenerator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -47,7 +48,7 @@ class ProjectController extends Controller
         $project = Project::create(array_merge(
             [
                 'user_id' => auth()->id(),
-                'uuid' => uniqid(Str::slug($request->name) . '-'),
+                'uuid' => uniqid(Str::slug($request->name).'-'),
             ],
             $request->validated()
         ));
@@ -123,7 +124,7 @@ class ProjectController extends Controller
         $export->generate();
 
         $content = $export->text();
-        $filename = $project->uuid . '.' . $export->extension();
+        $filename = $project->uuid.'.'.$export->extension();
 
         Storage::disk('exports')->put($filename, $content);
 
@@ -133,8 +134,9 @@ class ProjectController extends Controller
 
     }
 
-    public function codeExample(Project $project, string $language)
+    public function codeExample(Project $project, Request $request)
     {
+        dd($request->all());
         $routes = RestApiGenerator::generate($project);
         $class = match ($language) {
             'python' => Python::class,
@@ -148,7 +150,8 @@ class ProjectController extends Controller
         $export->endpoint(RestApiGenerator::getEndpoint($project));
         $export->generate();
 
-        $content = $export->text();
+        $content = view('code', ['content' => $export->text()])->render();
+
         return success_response(['content' => $content]);
     }
 }

@@ -67,11 +67,11 @@ function CustomNode({data: {resource, rest_api_doc, onDeleteResource, onResource
                             style={{display: isToolbarVisible ? 'block' : 'none'}} size={17}
                             onClick={() => onResourceSelected(resource)}
                         />
-                        <IconEdit
-                            className="hover:border rounded-full"
-                            style={{display: isToolbarVisible ? 'block' : 'none'}} size={17}
-                            onClick={openUpdateModal}
-                        />
+                        {/*<IconEdit*/}
+                        {/*    className="hover:border rounded-full"*/}
+                        {/*    style={{display: isToolbarVisible ? 'block' : 'none'}} size={17}*/}
+                        {/*    onClick={openUpdateModal}*/}
+                        {/*/>*/}
                         <IconTrash
                             className="hover:border hover:border-red rounded-full"
                             style={{display: isToolbarVisible ? 'block' : 'none'}} color="red" size={17}
