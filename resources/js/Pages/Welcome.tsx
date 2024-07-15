@@ -39,10 +39,14 @@ export default function Welcome() {
                             <p className="mt-6 text-lg leading-8 text-gray-600">Quickly setup endpoints, generate custom data, and perform operations on it using RESTful interface</p>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
                                 <Link href={route('login')}
-                                   className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get
+                                      className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get
                                     started</Link>
-                                <Link href={route('docs')} className="text-sm font-semibold leading-6 text-gray-900">Learn
-                                    more <span aria-hidden="true">→</span></Link>
+
+                                <a className="text-sm font-semibold leading-6 text-gray-900"
+                                   target="_blank" href="https://github.com/FurqatMashrabjonov/mockapi/wiki">
+                                    Learn
+                                    more <span aria-hidden="true">→</span>
+                                </a>
                             </div>
                         </div>
                     </div>
