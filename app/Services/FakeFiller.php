@@ -51,12 +51,24 @@ class FakeFiller
             /*
              * Standard faker fields
              */
-            'number' => [],
-            'string' => [],
-            'date' => [],
-            'boolean' => [],
-            'object' => [],
-            'array' => [],
+            'number' => [
+                'numberBetween' => ['numberBetween', [1, 100000]],
+            ],
+            'string' => [
+                'sentence' => ['sentence', []],
+            ],
+            'date' => [
+                'dateTimeBetween' => ['dateTimeBetween', ['now', '+1 week']],
+            ],
+            'boolean' => [
+                'boolean' => ['boolean', []],
+            ],
+            'object' => [
+                'object' => ['object', []],
+            ],
+            'array' => [
+                'words' => ['words', [3, true]],
+            ],
 
             /*
              * available in https://fakerphp.github.io/formatters/
@@ -321,19 +333,37 @@ class FakeFiller
         return $availableFields;
     }
 
-    public static function getFieldsToFrontend(): array
+    public static function getAvailableFieldsCategories(): array
     {
-        $fields = [];
-        foreach (self::availableFields() as $key => $availableField) {
-            if (count($availableField) > 0) {
-                foreach ($availableField as $field => $value) {
-                    $fields['fakerPHP'][] = $key.'.'.$field;
-                }
-            } else {
-                $fields[$key] = [];
+        return array_keys(self::availableFields());
+    }
+
+    public static function getAvailableFieldsTypes(): array
+    {
+        $availableFields = [];
+
+        foreach (self::availableFields() as $fields) {
+            foreach ($fields as $fieldName => $field) {
+                $availableFields[] = $fieldName;
             }
         }
+        return $availableFields;
+    }
 
-        return $fields;
+    public static function getFieldsToFrontend(): array
+    {
+//        $fields = [];
+//        foreach (self::availableFields() as $key => $availableField) {
+//            if (count($availableField) > 0) {
+//                foreach ($availableField as $field => $value) {
+//                    $fields['fakerPHP'][] = $key.'.'.$field;
+//                }
+//            } else {
+//                $fields[$key] = [];
+//            }
+//        }
+//
+//        return $fields;
+        return self::availableFields();
     }
 }

@@ -151,7 +151,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                     <main>{children}</main>
 
                     <Toaster
-                        position="bottom-right"
+                        position="bottom-center"
                         reverseOrder={false}
                         gutter={8}
                         containerClassName=""

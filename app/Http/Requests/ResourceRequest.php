@@ -26,12 +26,8 @@ class ResourceRequest extends FormRequest
             'name' => ['required', 'regex:/^[a-zA-Z0-9_]+$/'],
             'fields' => ['required', 'array'],
             'fields.*.name' => ['required', 'regex:/^[a-zA-Z0-9_]+$/'],
-            'fields.*.type' => ['required', 'in:'.implode(',', self::availableFields())],
+            'fields.*.category' => ['required', 'in:'.implode(',', FakeFiller::getAvailableFieldsCategories())],
+            'fields.*.type' => ['required', 'in:'.implode(',', FakeFiller::getAvailableFieldsTypes())],
         ];
-    }
-
-    public function availableFields(): array
-    {
-        return FakeFiller::getAvailableFieldsAs1DArray();
     }
 }

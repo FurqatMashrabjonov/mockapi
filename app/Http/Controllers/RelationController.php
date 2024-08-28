@@ -23,10 +23,7 @@ class RelationController extends Controller
         } else {
             $destination = Resource::query()->where('id', $data['destination'])->first();
             if ($destination) {
-                //handle cycle relation
-                if ($destination->parent_id == $source->id) {
-                    return response()->json(['message' => 'Cycle relation not allowed'], 400);
-                }
+
                 $source->parent_id = $destination->id;
             } else {
                 return response()->json(['message' => 'Destination not found'], 404);

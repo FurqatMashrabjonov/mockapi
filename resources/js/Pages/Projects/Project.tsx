@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, Link, router, useForm} from '@inertiajs/react';
+import {Head, router, useForm} from '@inertiajs/react';
 import {PageProps} from '@/types';
 import React, {useEffect, useState} from "react";
 import {Endpoint} from "@/Components/Endpoint";
@@ -7,14 +7,13 @@ import Relations from "@/Components/Relations";
 import Modal from "@/Components/Modal";
 import {CreateResource} from "@/Pages/Projects/Components/CreateResource";
 import {
-    IconCode,
     IconDotsVertical, IconEdit, IconFileExport,
     IconPlus,
     IconTrash
 } from "@tabler/icons-react";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {CreateResourcesByAI} from "@/Pages/Projects/Components/CreateResourcesByAI";
-import {Project, Resource} from "@/types/project";
+import {Project} from "@/types/project";
 import Dropdown from "@/Components/Dropdown";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -25,7 +24,6 @@ import {Export} from "@/Pages/Projects/Components/Export";
 import {EndpointType} from "@/types/endpoint";
 import ConnectResourceTo from "@/Pages/Projects/Components/ConnectReosurceTo";
 import ResourceData from "@/Pages/Projects/Components/ResourceData";
-// import {CodeExamples} from "@/Pages/Projects/Components/CodeExamples";
 
 export default function Dashboard({project, max_fields, max_resources, endpoint, auth}: PageProps<{
     fields: Object,
@@ -78,16 +76,8 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
         getResources()
     }
 
-    const openShowDeleteProjectModal = () => {
-        setShowDeleteProjectModal(true)
-    }
-
     const closeShowDeleteProjectModal = () => {
         setShowDeleteProjectModal(false)
-    }
-
-    const openEditProjectModal = () => {
-        setShowEditProject(true)
     }
 
     const closeEditProjectModal = () => {
@@ -228,7 +218,7 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
 
                             </div>
                             <Dropdown.Content>
-                                <Dropdown.Button onClick={openEditProjectModal}>
+                                <Dropdown.Button onClick={() => setShowEditProject(true)}>
                                     <IconEdit size="20" /> <h6 className="ml-2">Edit</h6>
                                 </Dropdown.Button>
                                 <Dropdown.Button onClick={openExportModal}>
@@ -238,7 +228,7 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
                                 {/*    <IconCode size="20" /> <h6 className="ml-2">Code Examples</h6>*/}
                                 {/*</Dropdown.Button>*/}
                                 <hr className="m-1"/>
-                                <Dropdown.Button onClick={openShowDeleteProjectModal}>
+                                <Dropdown.Button onClick={() => setShowDeleteProjectModal(true)}>
                                     <IconTrash size="20" color="red" /> <h6 className="ml-2">Delete</h6>
                                 </Dropdown.Button>
                             </Dropdown.Content>
@@ -281,7 +271,7 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
                                 Resources
                             </h2>
                             <div>
-                                <SecondaryButton disabled={resources.length >= max_resources} onClick={openModal}>
+                                <SecondaryButton disabled={resources.length >= max_resources} onClick={() => setShowModal(true)}>
                                     <IconPlus size={15}/> &nbsp; Create ({max_resources - resources.length})
                                 </SecondaryButton>
                                 {/*<SecondaryButton className="ml-2" disabled={resources.length == 5} onClick={openAIGenerateModal}>*/}

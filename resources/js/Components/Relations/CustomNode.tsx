@@ -15,6 +15,8 @@ import DeleteResource from "@/Pages/Projects/Components/DeleteResource";
 
 function CustomNode({data: {resource, rest_api_doc, onDeleteResource, onResourceSelected, showData, auth}}: NodeProps) {
 
+    console.log(rest_api_doc)
+
     const [isToolbarVisible, setIsToolbarVisible] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);

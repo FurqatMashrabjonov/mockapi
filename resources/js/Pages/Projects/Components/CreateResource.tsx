@@ -10,7 +10,6 @@ import axios from "axios";
 import {IconPlus, IconX} from "@tabler/icons-react";
 import toast from "react-hot-toast";
 
-
 export function CreateResource({project, maxFields, closeModal, auth}: PageProps<{
     project: Object,
     maxFields: number,
@@ -20,20 +19,15 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
     const {data, setData, post, processing, errors, reset} = useForm({
         name: '',
         fields: [
-            // {
-            //     name: 'id',
-            //     category: 'number',
-            //     type: 'number',
-            // },
             {
                 name: 'name',
-                category: 'fakerPHP',
-                type: 'person.firstName',
+                category: 'person',
+                type: 'firstName',
             },
             {
                 name: 'phone_number',
-                category: 'fakerPHP',
-                type: 'phoneNumber.phoneNumber',
+                category: 'phoneNumber',
+                type: 'phoneNumber',
             },
         ],
     });
@@ -56,6 +50,13 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
 
     const createResource = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        //delete ',' comma of each filed type in the fields array
+        let newFields = [...data.fields];
+        newFields.forEach((field: any) => {
+            field.type = field.type.replace(/,/g, '');
+        });
+        setData('fields', newFields);
 
         post(route('resources.store', {project: project}), {
             preserveScroll: true,
@@ -84,8 +85,8 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
         }
         setData('fields', [...data.fields, {
             name: '',
-            category: 'fakerPHP',
-            type: 'address.city',
+            category: 'address',
+            type: 'city',
         }]);
     }
 
@@ -99,7 +100,6 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    // @ts-ignore
     return (
         <form onSubmit={createResource} className="p-6 overflow-y-scroll"
               style={{maxHeight: '100vh', overflowY: 'auto'}}>
@@ -184,9 +184,9 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                     setData('fields', newFields);
                                 }}
                             >
-                                {index == 0 && (
-                                    <option value="number">Unique ID</option>
-                                )}
+                                {/*{index == 0 && (*/}
+                                {/*    <option value="number">Unique ID</option>*/}
+                                {/*)}*/}
 
                                 {Object.entries(fields).map(([category, fields]) => {
                                     return (
@@ -199,7 +199,7 @@ export function CreateResource({project, maxFields, closeModal, auth}: PageProps
                                 })}
                             </select>
 
-                            {fields[field.category] && fields[field.category].length > 0 && (
+                            {fields[field.category] && (
                                 <select
                                     id={`field-type-${index}`}
                                     className=" ml-6 w-3/12 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"

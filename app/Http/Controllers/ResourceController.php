@@ -42,7 +42,14 @@ class ResourceController extends Controller
      */
     public function createOrUpdate(Project $project, ResourceRequest $request)
     {
-        $this->createResource($request->validated(), $project);
+        $data = $request->validated();
+
+        $data['fields'] = collect($data['fields'])->map(function ($field) {
+            $field['type'] = $field['category'] . '.' . $field['type'];
+            return $field;
+        })->toArray();
+
+        $this->createResource($data, $project);
     }
 
     public function createResource(array $data, Project $project)
