@@ -11,6 +11,7 @@ use App\Services\AimlApiService;
 use App\Services\Export\Javascript;
 use App\Services\RestApiGenerator;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 Route::controller(IndexController::class)->group(function () {
     Route::get('/', 'welcome')->name('welcome');

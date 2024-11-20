@@ -7,6 +7,7 @@ import Relations from "@/Components/Relations";
 import Modal from "@/Components/Modal";
 import {CreateResource} from "@/Pages/Projects/Components/CreateResource";
 import {
+    IconBrandOpenai,
     IconDotsVertical, IconEdit, IconFileExport,
     IconPlus,
     IconTrash
@@ -274,9 +275,9 @@ export default function Dashboard({project, max_fields, max_resources, endpoint,
                                 <SecondaryButton disabled={resources.length >= max_resources} onClick={() => setShowModal(true)}>
                                     <IconPlus size={15}/> &nbsp; Create ({max_resources - resources.length})
                                 </SecondaryButton>
-                                {/*<SecondaryButton className="ml-2" disabled={resources.length == 5} onClick={openAIGenerateModal}>*/}
-                                {/*    <IconBrandOpenai size={15}/> &nbsp; Generate With AI*/}
-                                {/*</SecondaryButton>*/}
+                                <SecondaryButton className="ml-2" disabled={resources.length == 5} onClick={openAIGenerateModal}>
+                                    <IconBrandOpenai size={15}/> &nbsp; Generate With AI
+                                </SecondaryButton>
                             </div>
                         </div>
                         <div className="pl-6 pr-6 text-gray-900 dark:text-gray-100">
