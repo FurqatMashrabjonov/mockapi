@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialLoginController extends Controller
@@ -25,13 +26,12 @@ class SocialLoginController extends Controller
         }
 
         $user = Socialite::driver($provider)->user();
-        dd($user);
 
         $localUser = User::where('email', $user->email)->first();
         if (! $localUser) {
             $localUser = User::create([
                 'name' => $user->getName() ?? $user->getNickname() ?? $user->getEmail(),
-                'email' => $user->getEmail(),
+                'email' => $user->getEmail() ?? Str::lower($user->getNickname()) . '@' . $provider . '.com',
                 'provider' => $provider,
                 'password' => bcrypt(uniqid()),
             ]);
