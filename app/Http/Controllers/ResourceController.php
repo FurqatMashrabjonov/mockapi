@@ -10,6 +10,7 @@ use App\Services\AiResourceGenerator;
 use App\Services\FakeFiller;
 use App\Services\Relation\EdgeGenerator;
 use App\Services\Relation\NodeGenerator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ResourceController extends Controller
@@ -87,7 +88,7 @@ class ResourceController extends Controller
                     'source' => $relation['source'],
                     'destination' => $relation['destination'],
                 ];
-                $this->relationController->connect($data, $project);
+                $this->relationController->connect(new Request($data));
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());

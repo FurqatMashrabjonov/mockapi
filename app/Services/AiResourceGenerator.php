@@ -23,7 +23,7 @@ class AiResourceGenerator
          here are my resources that i already have '.$resourcesString.' dont repeat resources,
          resources fields should be unique and min 3 fields for each resource, feel free to add more fields if you want,
          little bit description about the app is "'.$projectDescription.'".
-         the max number of resources is '.config('resources.max_resources', 5).', be careful about cycling resources relationship. ');
+         the max number of resources is '.config('resources.max_resources', 3).', be careful about cycling resources relationship. ');
         $array = json_decode($response->text(), true);
         if ($array == null) {
             return [];

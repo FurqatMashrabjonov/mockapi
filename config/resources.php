@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'max_resources' => 5,
+    'max_resources' => 3,
 ];
