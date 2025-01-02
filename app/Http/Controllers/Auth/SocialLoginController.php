@@ -30,7 +30,7 @@ class SocialLoginController extends Controller
         if (! $localUser) {
             $localUser = User::create([
                 'name' => $user->getName() ?? $user->getNickname() ?? $user->getEmail(),
-                'email' => $user->email,
+                'email' => $user->getEmail(),
                 'provider' => $provider,
                 'password' => bcrypt(uniqid()),
             ]);
