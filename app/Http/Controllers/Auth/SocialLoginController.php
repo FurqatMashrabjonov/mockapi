@@ -25,6 +25,7 @@ class SocialLoginController extends Controller
         }
 
         $user = Socialite::driver($provider)->user();
+        dd($user);
 
         $localUser = User::where('email', $user->email)->first();
         if (! $localUser) {
